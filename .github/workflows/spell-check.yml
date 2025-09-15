@@ -16,4 +16,5 @@ jobs:
         uses: codespell-project/actions-codespell@v2
         with:
           path: .
-          args: --config .codespellrc
+          skip: ./.git,./_site,./.quarto,./node_modules,./.venv,./.idea,./.vscode
+          check_filenames: true
