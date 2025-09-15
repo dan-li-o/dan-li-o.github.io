@@ -1,0 +1,30 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Welcome",
+    "section": "",
+    "text": "Welcome to my Quarto website. This is a starter template you can customize.\n\n\n\nA minimal Quarto website configuration\nA starter About page\nA basic stylesheet for quick tweaks\n\n\n\n\nRun quarto preview to serve the site locally with auto-reload."
+  },
+  {
+    "objectID": "index.html#whats-here",
+    "href": "index.html#whats-here",
+    "title": "Welcome",
+    "section": "",
+    "text": "A minimal Quarto website configuration\nA starter About page\nA basic stylesheet for quick tweaks"
+  },
+  {
+    "objectID": "index.html#local-preview",
+    "href": "index.html#local-preview",
+    "title": "Welcome",
+    "section": "",
+    "text": "Run quarto preview to serve the site locally with auto-reload."
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "Hi, I’m Dan. This is a placeholder About page.\n\nInterests: TBD\nProjects: TBD\nContact: TBD\n\nYou can edit this page in about.qmd."
+  }
+]
