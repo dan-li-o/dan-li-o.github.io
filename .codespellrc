@@ -1,7 +1,0 @@
-[codespell]
-skip = ./.git,./_site,./.quarto,./node_modules,./.venv,./.idea,./.vscode
-check-filenames = true
-check-hidden = false
-# Add project-specific terms if Codespell reports false positives:
-# ignore-words-list = github,gh-pages,auto-reload,quarto,navbar
-
