@@ -1,8 +1,8 @@
 :root{
-  --bg: #ffffff;
-  --fg: #111111;
-  --muted: rgba(17,17,17,0.65);
-  --accent: #24364d; /* muted navy for links */
+  --bg: #0d0f12;
+  --fg: #e8e9ea;
+  --muted: rgba(232,233,234,0.6);
+  --accent: #9aa5b1; /* subtle silver-gray */
   --thread: #b8bcc2; /* silver thread */
 }
 
@@ -48,12 +48,12 @@ main { min-height: 100vh; }
 #hero h1{ font-size: clamp(36px, 6vw, 64px); line-height: 1.1; margin: 0 0 16px; }
 #hero .lede{ font-size: clamp(16px, 2.2vw, 20px); }
 
-#cta .cta-box{ display: inline-flex; flex-direction: column; gap: 8px; border: 1px solid rgba(0,0,0,0.12); border-radius: 999px; padding: 12px 20px; backdrop-filter: blur(6px); background: rgba(0,0,0,0.03); }
+#cta .cta-box{ display: inline-flex; flex-direction: column; gap: 8px; border: 1px solid rgba(255,255,255,0.12); border-radius: 999px; padding: 12px 20px; backdrop-filter: blur(6px); background: rgba(255,255,255,0.03); }
 #cta .cta-button{ color: var(--fg); text-decoration: none; font-weight: 600; }
 #cta .cta-sub{ color: var(--muted); font-size: 14px; }
 
 /* Footer */
-#footer{ padding: 24px 8vw; border-top: 1px solid rgba(0,0,0,0.08); color: var(--muted); font-size: 14px; }
+#footer{ padding: 24px 8vw; border-top: 1px solid rgba(255,255,255,0.08); color: var(--muted); font-size: 14px; }
 
 /* Thread placeholder styling */
 .thread path{ stroke: var(--thread); stroke-width: 2; fill: none; opacity: 0.85; }

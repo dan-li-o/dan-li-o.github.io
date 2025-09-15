@@ -1,36 +1,35 @@
-# Quarto Website
+# Dan Li — Personal Site (Static)
 
-This repo contains the source for a Quarto website to be published with GitHub Pages. The rendered site is not tracked (see `.gitignore`).
+This is a minimal static site scaffold (HTML/CSS/JS) deployed via GitHub Pages. No build tools or frameworks are required.
 
-## Prerequisites
+## Structure
 
-- Install Quarto: https://quarto.org/docs/get-started/
+- `index.html` — one‑page layout with section anchors (Hero, About, Work, Contact)
+- `assets/css/main.css` — base tokens, layout, right‑side nav
+- `assets/js/main.js` — smooth scroll + scrollspy (reduced‑motion aware)
+- `assets/svg/` — placeholder for silver thread SVGs
+- `assets/img/` — add thumbnails when needed
 
-## Local development
+## Local preview
 
-```bash
-quarto preview
-```
-
-## Build
-
-```bash
-quarto render
-```
-
-## Publish to GitHub Pages (gh-pages branch)
-
-This repo includes a GitHub Actions workflow that renders and publishes on pushes to `main`.
-
-1. Push this repo to GitHub (`dan-li-o/dan-li-o.github.io`).
-2. In the repo settings, set Pages to deploy from the `gh-pages` branch.
-3. Push any changes to `main`; the action will render and update `gh-pages`.
-
-Alternatively, you can publish locally using Quarto:
+Open `index.html` directly or run a simple server:
 
 ```bash
-quarto publish gh-pages
+python3 -m http.server 8000
+# then visit http://localhost:8000
 ```
 
-This builds the site locally and pushes the rendered output to the `gh-pages` branch using the GitHub token.
+## Deploy (GitHub Pages)
 
+This repo name (`dan-li-o.github.io`) serves Pages from the root of the `main` branch automatically. Push to `main` and Pages will update.
+
+## CI
+
+- Link check workflow runs Lychee on `**/*.html` for PRs, pushes, and weekly.
+
+## Next steps (Milestones)
+
+1) Thread line‑draw (hero→about) and text reveals using GSAP + ScrollTrigger.
+2) Pinned “Work” mirror animation (front/back faces) with reduced‑motion fallback.
+3) Weave/converge sequences and CTA circle draw.
+4) Polish: typography, a11y, performance, SEO/social cards.

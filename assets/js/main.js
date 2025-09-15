@@ -33,6 +33,10 @@
     if(byId[id]) byId[id].setAttribute('aria-current', 'true');
   }, { rootMargin: '0px 0px -60% 0px', threshold: [0.25, 0.5, 0.75, 1] });
 
-  document.querySelectorAll('section.scene[id]').forEach(sec => observer.observe(sec));
+  // Observe targets referenced in the nav (sections or internal anchors)
+  navLinks.forEach(a => {
+    const id = a.getAttribute('data-target');
+    const el = document.getElementById(id);
+    if(el) observer.observe(el);
+  });
 })();
-
