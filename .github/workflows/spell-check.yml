@@ -15,5 +15,5 @@ jobs:
       - name: Codespell
         uses: codespell-project/actions-codespell@v2
         with:
-          config: .codespellrc
-
+          path: .
+          args: --config .codespellrc
