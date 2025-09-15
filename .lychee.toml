@@ -1,0 +1,17 @@
+# Lychee configuration for link checking
+
+# Ignore non-web or local dev links
+exclude = [
+  "mailto:*",
+  "tel:*",
+  "http://localhost:*",
+  "http://127.0.0.1:*",
+  "https://localhost:*",
+  "https://127.0.0.1:*"
+]
+
+# Keep noise low but still reliable
+max_retries = 2
+retry_wait_time = 2
+require_https = true
+

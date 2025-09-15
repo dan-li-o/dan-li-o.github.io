@@ -1,0 +1,10 @@
+/* Minimal custom styles for the site */
+:root {
+  --brand: #2b6cb0;
+}
+
+.navbar-brand, .navbar a.nav-link.active { color: var(--brand) !important; }
+
+/* Improve readability */
+main { line-height: 1.6; }
+

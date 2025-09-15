@@ -1,0 +1,23 @@
+# Quarto output and cache
+/_site/
+/.quarto/
+
+# OS & editor cruft
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Dependencies & envs
+node_modules/
+.venv/
+.env
+
+# R (if used with Quarto)
+.Rhistory
+.RData
+.Rproj.user/
+
+# Logs
+*.log
+

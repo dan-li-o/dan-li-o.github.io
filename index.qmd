@@ -1,0 +1,19 @@
+---
+title: "Welcome"
+page-layout: full
+---
+
+# Hello
+
+Welcome to my Quarto website. This is a starter template you can customize.
+
+## What’s here
+
+- A minimal Quarto website configuration
+- A starter About page
+- A basic stylesheet for quick tweaks
+
+## Local preview
+
+Run `quarto preview` to serve the site locally with auto-reload.
+

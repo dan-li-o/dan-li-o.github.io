@@ -1,0 +1,12 @@
+---
+title: "About"
+---
+
+Hi, I’m Dan. This is a placeholder About page.
+
+- Interests: TBD
+- Projects: TBD
+- Contact: TBD
+
+You can edit this page in `about.qmd`.
+

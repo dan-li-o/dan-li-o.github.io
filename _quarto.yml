@@ -1,0 +1,31 @@
+project:
+  type: website
+  output-dir: _site
+
+website:
+  title: "Dan Li"
+  site-url: https://dan-li-o.github.io/
+  description: "Personal website built with Quarto"
+  repo-url: https://github.com/dan-li-o/dan-li-o.github.io
+  repo-actions: [issue, edit]
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+      - href: about.qmd
+        text: About
+  page-footer:
+    left: "© 2025 Dan Li"
+    right: "[GitHub](https://github.com/dan-li-o)"
+
+format:
+  html:
+    theme:
+      light: cosmo
+      dark: darkly
+    css: styles.css
+    toc: false
+    smooth-scroll: true
+
+editor: visual
+
