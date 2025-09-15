@@ -8,24 +8,17 @@ website:
   description: "Personal website built with Quarto"
   repo-url: https://github.com/dan-li-o/dan-li-o.github.io
   repo-actions: [issue, edit]
-  navbar:
-    left:
-      - href: index.qmd
-        text: Home
-      - href: about.qmd
-        text: About
-  page-footer:
-    left: "© 2025 Dan Li"
-    right: "[GitHub](https://github.com/dan-li-o)"
+  navbar: false
 
 format:
   html:
-    theme:
-      light: cosmo
-      dark: darkly
-    css: styles.css
+    theme: none
+    css: [assets/css/main.css]
+    include-after-body: assets/js/main.js
     toc: false
-    smooth-scroll: true
+    smooth-scroll: false
+    anchor-sections: false
+    code-copy: false
+    code-tools: false
 
 editor: visual
-

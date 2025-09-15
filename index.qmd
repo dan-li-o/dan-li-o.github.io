@@ -1,19 +1,82 @@
 ---
-title: "Welcome"
+title: "Dan Li"
 page-layout: full
+format:
+  html:
+    toc: false
 ---
 
-# Hello
+```{=html}
+<nav class="side-nav" aria-label="Section navigation">
+  <a href="#hero" data-target="hero"><span class="label">Hero</span></a>
+  <a href="#about" data-target="about"><span class="label">About</span></a>
+  <a href="#mirror-gate" data-target="mirror-gate"><span class="label">Mirror</span></a>
+  <a href="#studio" data-target="studio"><span class="label">Studio</span></a>
+  <a href="#writing" data-target="writing"><span class="label">Writing</span></a>
+  <a href="#cta" data-target="cta"><span class="label">Contact</span></a>
+</nav>
+```
 
-Welcome to my Quarto website. This is a starter template you can customize.
+```{=html}
+<main>
+  <section id="hero" class="scene" aria-labelledby="hero-h">
+    <div>
+      <h1 id="hero-h">I write. I code. I turn complex ideas into experiences that people can see, play, and remember.</h1>
+      <p class="lede">Independent scholar, writer, and methodologist who bridges philosophy, coding, and design to create clarity.</p>
+      <!-- Thread placeholder (hero) -->
+      <svg class="thread" id="thread-hero" width="100%" height="80" viewBox="0 0 1200 80" role="img" aria-label="Silver thread">
+        <path d="M0,60 C200,20 400,100 600,40 C800,0 1000,80 1200,20"/>
+      </svg>
+    </div>
+  </section>
 
-## What’s here
+  <section id="about" class="scene" aria-labelledby="about-h">
+    <div>
+      <h2 id="about-h">About</h2>
+      <p>Philosophy taught me how to think clearly about complexity; coding gave me tools to make that complexity visible; independence gave me the space to integrate them into one practice. Core values: clarity, elegance, openness, and craft.</p>
+      <!-- Thread placeholder (about) -->
+      <svg class="thread" id="thread-about" width="100%" height="60" viewBox="0 0 1200 60" role="img" aria-label="Silver thread">
+        <path d="M0,30 C300,0 600,60 900,20 C1050,5 1125,40 1200,30"/>
+      </svg>
+    </div>
+  </section>
 
-- A minimal Quarto website configuration
-- A starter About page
-- A basic stylesheet for quick tweaks
+  <section id="mirror-gate" class="scene" aria-labelledby="mirror-h">
+    <div>
+      <h2 id="mirror-h">Mirror Gate</h2>
+      <p class="lede">Two sides of one craft — Writing and Studio as a single practice.</p>
+      <!-- Medallion placeholder; will rotate in later milestone -->
+      <div class="medallion" aria-label="Studio / Writing medallion" style="width:160px;height:160px;border-radius:50%;margin-top:16px;border:1px solid rgba(255,255,255,0.2);"></div>
+    </div>
+  </section>
 
-## Local preview
+  <section id="studio" class="scene" aria-labelledby="studio-h">
+    <div>
+      <h2 id="studio-h">Studio</h2>
+      <p>Method-first boutique work. Seven-step method (open access). Selected case study, e.g., Ryan’s site.</p>
+    </div>
+  </section>
 
-Run `quarto preview` to serve the site locally with auto-reload.
+  <section id="writing" class="scene" aria-labelledby="writing-h">
+    <div>
+      <h2 id="writing-h">Writing</h2>
+      <p>Unlawful Laws (blurb), essays and reflections, selected publications.</p>
+    </div>
+  </section>
 
+  <section id="cta" class="scene" aria-labelledby="cta-h">
+    <div>
+      <h2 id="cta-h" class="sr-only">Contact</h2>
+      <div class="cta-box">
+        <!-- TODO: replace with your email address below -->
+        <a class="cta-button" href="mailto:hello@example.com">Start a conversation</a>
+        <div class="cta-sub">Boutique, method‑first collaborations. Limited availability.</div>
+      </div>
+    </div>
+  </section>
+
+  <footer id="footer" role="contentinfo">
+    <div>© 2025 Dan Li · <a href="https://github.com/dan-li-o" target="_blank" rel="noopener">GitHub</a></div>
+  </footer>
+</main>
+```
