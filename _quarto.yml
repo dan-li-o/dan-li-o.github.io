@@ -9,6 +9,7 @@ website:
   repo-url: https://github.com/dan-li-o/dan-li-o.github.io
   repo-actions: [issue, edit]
   navbar: false
+  search: false
 
 format:
   html:
