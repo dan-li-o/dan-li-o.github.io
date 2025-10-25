@@ -35,13 +35,16 @@
 
   // lazy-build guard
   let mosaicBuilt = false;
+  
+  // Scroll throttle tracking
+  let scrollTicking = false;
+  let resizeTicking = false;
 
   // ====== INIT ======
-
   initRevealAnimations();
   initNavHighlight();
   initYearStamp();
-  initMosaicLazy(); // sets up listeners to build mosaic once
+  initMosaicLazy();
   handleScrollProgress(); // prime progress calc
 
   // ====== Reveal-on-scroll using IntersectionObserver ======
@@ -104,17 +107,20 @@
     }
   }
 
-  // ====== Mosaic lazy init (Step C) ======
+  // ====== Mosaic lazy init ======
   function initMosaicLazy() {
-    // Only set up resize listener now. We'll actually build on first scroll or load.
     if (mosaicField && pattern.length) {
-      window.addEventListener(
-        'resize',
-        debounce(() => {
-          if (!mosaicBuilt) return;
-          buildMosaic();
-        }, 200)
-      );
+      window.addEventListener('resize', () => {
+        if (!resizeTicking) {
+          resizeTicking = true;
+          setTimeout(() => {
+            if (mosaicBuilt) {
+              buildMosaic();
+            }
+            resizeTicking = false;
+          }, 200);
+        }
+      });
     }
 
     // Build the mosaic only once: either on first scroll OR when fully loaded.
@@ -125,8 +131,8 @@
       handleScrollProgress();
     }
 
-    window.addEventListener('scroll', buildOnceIfNeeded, { passive: true });
-    window.addEventListener('load', buildOnceIfNeeded);
+    window.addEventListener('scroll', buildOnceIfNeeded, { passive: true, once: true });
+    window.addEventListener('load', buildOnceIfNeeded, { once: true });
   }
 
   // ====== Build mosaic DOM (optimized) ======
@@ -150,18 +156,17 @@
     const tileW = width / cols;
     const orderedTileH = orderedHeight / rows;
 
-    // Step B: batch all dots into a fragment, append once at the end
+    // Batch all dots into a fragment
     const frag = document.createDocumentFragment();
 
-    // Step D: downsample aggressively on narrow screens
-    const mobileSkip = window.innerWidth < 480 ? 2 : 1;
+    // Aggressive downsampling on narrow screens
+    const viewportWidth = window.innerWidth;
+    const mobileSkip = viewportWidth < 480 ? 3 : viewportWidth < 768 ? 2 : 1;
 
     pattern.forEach((row, rowIdx) => {
-      // skip some rows on mobile
       if (rowIdx % mobileSkip !== 0) return;
 
       row.forEach((tone, colIdx) => {
-        // skip some cols on mobile
         if (colIdx % mobileSkip !== 0) return;
         if (tone === -1) return;
 
@@ -198,7 +203,7 @@
 
         const orderColor = colorMap[tone] || colorMap[0];
 
-        // Instead of 6x setProperty calls, set cssText once
+        // Set all CSS properties in one go
         dot.style.cssText = `
           --scatter-x:${scatterXNum}px;
           --scatter-y:${scatterYNum}px;
@@ -233,6 +238,9 @@
 
     // append to the live DOM once
     mosaicField.appendChild(frag);
+
+    // Use will-change hint for smoother animations
+    mosaicField.style.willChange = 'transform';
 
     // initial positioning state
     const baseProgress = prefersReducedMotion ? 1 : calculateScrollProgress();
@@ -321,6 +329,9 @@
   function updateDotBases(progress) {
     const eased = easeInOut(progress);
 
+    // Batch DOM reads and writes
+    const updates = [];
+    
     dots.forEach((dot) => {
       const baseX = dot.traveler
         ? lerp(dot.scatterX, dot.orderX, eased)
@@ -332,12 +343,25 @@
       dot.baseX = baseX;
       dot.baseY = baseY;
 
-      dot.el.style.setProperty('--base-x', `${baseX}px`);
-      dot.el.style.setProperty('--base-y', `${baseY}px`);
+      updates.push({
+        el: dot.el,
+        baseX,
+        baseY,
+        shouldUnmute: dot.muted && eased >= dot.revealThreshold
+      });
 
       if (dot.muted && eased >= dot.revealThreshold) {
         dot.muted = false;
-        dot.el.classList.remove('is-muted');
+      }
+    });
+
+    // Apply all DOM writes together
+    updates.forEach(({ el, baseX, baseY, shouldUnmute }) => {
+      el.style.setProperty('--base-x', `${baseX}px`);
+      el.style.setProperty('--base-y', `${baseY}px`);
+      
+      if (shouldUnmute) {
+        el.classList.remove('is-muted');
       }
     });
 
@@ -362,9 +386,18 @@
     // don't animate pre-build
     if (!mosaicBuilt && !prefersReducedMotion) return;
 
-    targetProgress = prefersReducedMotion ? 1 : calculateScrollProgress();
-    if (!progressFrame) {
-      progressFrame = requestAnimationFrame(stepProgress);
+    if (!scrollTicking) {
+      scrollTicking = true;
+      
+      requestAnimationFrame(() => {
+        targetProgress = prefersReducedMotion ? 1 : calculateScrollProgress();
+        
+        if (!progressFrame) {
+          progressFrame = requestAnimationFrame(stepProgress);
+        }
+        
+        scrollTicking = false;
+      });
     }
   }
 
@@ -399,15 +432,6 @@
     const raw = (scrollY + viewport * 0.1 - heroStart) / range;
 
     return clamp(raw, 0, 1);
-  }
-
-  // ====== Utilities ======
-  function debounce(fn, wait = 150) {
-    let timeout;
-    return function debounced(...args) {
-      clearTimeout(timeout);
-      timeout = setTimeout(() => fn.apply(this, args), wait);
-    };
   }
 
   // global scroll listener for morph animation
