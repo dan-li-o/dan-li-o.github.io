@@ -1,35 +1,21 @@
-# Dan Li — Personal Site (Static)
+# Dan Li — Personal Site
 
-This is a minimal static site scaffold (HTML/CSS/JS) deployed via GitHub Pages. No build tools or frameworks are required.
+Minimal one-page site authored in plain HTML/CSS/JS and deployed from the repository root via GitHub Pages. No bundlers or frameworks required.
 
 ## Structure
 
-- `index.html` — one‑page layout with section anchors (Hero, About, Work, Contact)
-- `assets/css/main.css` — base tokens, layout, right‑side nav
-- `assets/js/main.js` — smooth scroll + scrollspy (reduced‑motion aware)
-- `assets/svg/` — placeholder for silver thread SVGs
-- `assets/img/` — add thumbnails when needed
+- `index.html` — hero, featured work, quote, about, and contact sections
+- `styles.css` — tokens, layout, grid background, and micro-illustrations
+- `script.js` — reduced-motion-friendly reveal + scrollspy + dynamic year
+- `.nojekyll` — disables GitHub Pages’ default Jekyll processing
 
 ## Local preview
 
-Open `index.html` directly or run a simple server:
-
 ```bash
 python3 -m http.server 8000
-# then visit http://localhost:8000
+# visit http://localhost:8000
 ```
 
-## Deploy (GitHub Pages)
+## Deploy
 
-This repo name (`dan-li-o.github.io`) serves Pages from the root of the `main` branch automatically. Push to `main` and Pages will update.
-
-## CI
-
-- Link check workflow runs Lychee on `**/*.html` for PRs, pushes, and weekly.
-
-## Next steps (Milestones)
-
-1) Thread line‑draw (hero→about) and text reveals using GSAP + ScrollTrigger.
-2) Pinned “Work” mirror animation (front/back faces) with reduced‑motion fallback.
-3) Weave/converge sequences and CTA circle draw.
-4) Polish: typography, a11y, performance, SEO/social cards.
+Repo name (`dan-li-o.github.io`) means pushes to `main` instantly update Pages. No extra build step—keep static assets at the root.

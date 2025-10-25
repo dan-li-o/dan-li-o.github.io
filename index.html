@@ -3,71 +3,182 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Dan Li — Personal Site</title>
-    <meta name="description" content="I write. I code. I turn complex ideas into experiences that people can see, play, and remember." />
-    <link rel="stylesheet" href="assets/css/main.css" />
+    <title>Dan Li · writer, engineer, systems thinker</title>
+    <meta name="description" content="I write. I code. I build clarity from mess. Dan Li is a writer-engineer crafting thoughtful systems, studios, and stories." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <nav class="side-nav" aria-label="Section navigation">
-      <a href="#hero" data-target="hero"><span class="label">Hero</span></a>
-      <a href="#about" data-target="about"><span class="label">About</span></a>
-      <a href="#studio" data-target="studio"><span class="label">Studio</span></a>
-      <a href="#writing" data-target="writing"><span class="label">Writing</span></a>
-      <a href="#cta" data-target="cta"><span class="label">Contact</span></a>
-    </nav>
-
-    <main>
-      <section id="hero" class="scene" aria-labelledby="hero-h">
-        <div>
-          <h1 id="hero-h">Hero</h1>
-          <p class="lede">Short identity statement placeholder.</p>
-          <svg class="thread" id="thread-hero" width="100%" height="80" viewBox="0 0 1200 80" role="img" aria-label="Silver thread placeholder">
-            <path d="M0,60 C200,20 400,100 600,40 C800,0 1000,80 1200,20"/>
-          </svg>
+    <div class="page-shell">
+      <header class="site-header" aria-label="Primary">
+        <div class="container">
+          <div class="logo" aria-label="Dan Li home">Dan&nbsp;Li, Ph.D.</div>
+          <nav class="nav" aria-label="In-page navigation">
+            <a href="#hero" data-nav="hero">Home</a>
+            <a href="#work" data-nav="work">Work</a>
+            <a href="#about" data-nav="about">About</a>
+            <a href="#contact" data-nav="contact">Contact</a>
+          </nav>
         </div>
-      </section>
+      </header>
 
-      <section id="about" class="scene" aria-labelledby="about-h">
-        <div>
-          <h2 id="about-h">About</h2>
-          <p>Placeholder for compressed story and core values.</p>
+      <main>
+        <div class="mosaic-overlay" aria-hidden="true">
+          <figure class="order-glyph mosaic">
+            <div class="mosaic-field" id="mosaic-field" role="presentation"></div>
+          </figure>
         </div>
-      </section>
 
-      <section id="work" class="scene" aria-labelledby="work-h">
-        <div>
-          <h2 id="work-h">Work</h2>
-          <p class="lede">Two sides of one craft.</p>
-          <div class="medallion" aria-label="Studio / Writing medallion" style="width:160px;height:160px;border-radius:50%;margin:16px 0;border:1px solid rgba(0,0,0,0.2);"></div>
-
-          <div id="studio" class="work-block" aria-labelledby="studio-h">
-            <h3 id="studio-h">Studio</h3>
-            <p>Method-first boutique work — placeholder.</p>
+        <section id="hero" class="hero" data-animate>
+          <div class="container">
+            <p class="eyebrow">Writer · Engineer · Systems thinker</p>
+            <div class="mantra" aria-label="Core identity">
+              <span class="mantra-line write">I write.</span>
+              <span class="mantra-line code">I code.</span>
+              <span class="mantra-line build">I build clarity from mess.</span>
+            </div>
+            <p class="lede">
+              I help teams and ideas move from fog to form—through essays, prototypes, and systems that make the complex legible.
+            </p>
+            <div class="hero-actions">
+              <a class="button primary" href="#work">See featured work</a>
+              <a class="button ghost" href="mailto:hello@danlio.studio">Email me</a>
+            </div>
+            <p class="hero-note">Structure reveals thought. Order is not the opposite of imagination.</p>
           </div>
+        </section>
 
-          <div id="writing" class="work-block" aria-labelledby="writing-h">
-            <h3 id="writing-h">Writing</h3>
-            <p>Book, essays, publications — placeholder.</p>
+        <section id="mosaic-stage" class="mosaic-stage" aria-label="Mosaic convergence" data-animate>
+          <div class="mosaic-shell"></div>
+        </section>
+
+        <section id="work" class="section" data-animate>
+          <div class="container">
+            <div class="section-head">
+              <p class="eyebrow">Featured work</p>
+              <h2>Stories and systems in dialogue.</h2>
+              <p class="section-copy">Three lenses, one throughline: build clarity, then invite people in.</p>
+            </div>
+            <div class="work-grid">
+              <article class="work-card" data-animate>
+                <figure class="card-visual card-visual--essays" aria-hidden="true">
+                  <svg viewBox="0 0 120 72">
+                    <g class="swash">
+                      <path d="M4 58 C32 12, 72 12, 116 58" />
+                    </g>
+                    <g class="dots">
+                      <circle cx="20" cy="52" r="3" />
+                      <circle cx="44" cy="28" r="2" />
+                      <circle cx="72" cy="40" r="2.4" />
+                      <circle cx="96" cy="24" r="2.2" />
+                    </g>
+                  </svg>
+                </figure>
+                <p class="card-label">Essays</p>
+                <h3>Nothing But Thirty</h3>
+                <p>
+                  A daily letter where thoughts turn tender. I notice the extraordinary daily moments and write them into shared rituals of attention.
+                </p>
+                <ul>
+                  <li>Invites readers to slow down through structured prompts</li>
+                  <li>Essays catalog the textures of entering a new decade</li>
+                </ul>
+                <a class="card-link" href="https://nothingbut30.com" target="_blank" rel="noreferrer">Visit the series</a>
+              </article>
+
+              <article class="work-card" data-animate>
+                <figure class="card-visual card-visual--studio" aria-hidden="true">
+                  <svg viewBox="0 0 120 72">
+                    <rect x="6" y="18" width="108" height="40" rx="8" />
+                    <line x1="24" y1="30" x2="96" y2="30" />
+                    <line x1="24" y1="42" x2="72" y2="42" />
+                  </svg>
+                </figure>
+                <p class="card-label">Studio</p>
+                <h3>Danlio Studio — Built to Speak</h3>
+                <p>
+                  We help scholars gain visibility by translating their research into elegant websites and curations that sound like them.
+                </p>
+                <ul>
+                  <li>Editorial strategy intertwined with interaction design</li>
+                  <li>Lightweight systems clients can maintain without agencies</li>
+                </ul>
+                <a class="card-link" href="https://danlio.studio" target="_blank" rel="noreferrer">Explore the studio</a>
+              </article>
+
+              <article class="work-card" data-animate>
+                <figure class="card-visual card-visual--teaching" aria-hidden="true">
+                  <svg viewBox="0 0 120 72">
+                    <path d="M12 18 h42 a4 4 0 0 1 4 4 v32 h-50 z" />
+                    <path d="M62 18 h46 v36 h-46 z" />
+                    <line x1="70" y1="30" x2="98" y2="30" />
+                    <line x1="70" y1="42" x2="98" y2="42" />
+                  </svg>
+                </figure>
+                <p class="card-label">Writing & Teaching</p>
+                <h3>Unlawful Laws</h3>
+                <p>
+                  An interactive book probing how we live with scientific uncertainty through the lens of <em>The Three-Body Problem</em>, paired with a City University of New York course.
+                </p>
+                <ul>
+                  <li>Students map narratives the way engineers map systems</li>
+                  <li>Course artifacts double as public learning libraries</li>
+                </ul>
+                <a class="card-link" href="#contact">Request the syllabus</a>
+              </article>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <section id="cta" class="scene" aria-labelledby="cta-h">
-        <div>
-          <h2 id="cta-h" class="sr-only">Contact</h2>
-          <div class="cta-box">
-            <a class="cta-button" href="mailto:hello@example.com">Start a conversation</a>
-            <div class="cta-sub">Boutique, method‑first collaborations. Limited availability.</div>
+        <section class="quote-block" aria-label="Signature principle" data-animate>
+          <div class="container">
+            <p>“Chaos is just unstructured insight. My work is helping it take shape.”</p>
           </div>
+        </section>
+
+        <section id="about" class="section narrow" data-animate>
+          <div class="container">
+            <div class="section-head">
+              <p class="eyebrow">About</p>
+              <h2>Thinking like a writer, prototyping like an engineer.</h2>
+            </div>
+            <p>
+              I move between essays, facilitation, and code. Sometimes that looks like building a bespoke tool for a founder, other times it means coaching a team through better story architecture. Either way, the goal is the same: leave things clearer than we found them.
+            </p>
+            <p>
+              When a problem feels messy, I map it, label the tensions, and design light-touch systems that invite people to act. Clarity is a craft, not a constraint.
+            </p>
+          </div>
+        </section>
+
+        <section id="contact" class="section" data-animate>
+          <div class="container contact-grid">
+            <div>
+              <p class="eyebrow">Contact</p>
+              <h2>Ready to turn ideas into felt experiences?</h2>
+              <p>Tell me about the mess. I’ll bring the structure.</p>
+            </div>
+            <div class="contact-links" aria-label="Ways to connect">
+              <a href="mailto:hello@danlio.studio">hello@danlio.studio<span class="cursor">_</span></a>
+              <a href="https://github.com/dan-li-o" target="_blank" rel="noreferrer">GitHub</a>
+              <a href="https://www.linkedin.com/in/danli" target="_blank" rel="noreferrer">LinkedIn</a>
+              <a href="https://nothingbut30.com" target="_blank" rel="noreferrer">Nothing But 30</a>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <div class="container">
+          <span>© <span id="year"></span> Dan Li</span>
+          <span class="footer-note">A Moleskine notebook meets a command line.</span>
         </div>
-      </section>
-    </main>
+      </footer>
+    </div>
 
-    <footer id="footer" role="contentinfo">
-      <div>© 2025 Dan Li · <a href="https://github.com/dan-li-o" target="_blank" rel="noopener">GitHub</a></div>
-    </footer>
-
-    <script src="assets/js/main.js"></script>
+    <script src="mosaic-data.js" defer></script>
+    <script src="script.js" defer></script>
   </body>
-  </html>
-
+</html>
