@@ -404,6 +404,10 @@ body::after {
   margin-left: 0.75rem;
 }
 
+.card-front-line--bottom {
+  align-items: flex-end;
+}
+
 .card-front-line--essay {
   color: #b37f4a;
 }
@@ -435,7 +439,7 @@ body::after {
 }
 
 .work-card--essays .work-card-face--front {
-  background: #fff9e5cc;
+  background: rgba(255, 128, 0, 0.10);
   border-color: rgba(214, 123, 113, 0.2);
 }
 
@@ -444,7 +448,7 @@ body::after {
 }
 
 .work-card--studio .work-card-face--front {
-  background: rgba(173, 198, 226, 0.5);
+  background: rgba(173, 198, 226, 0.25);
   border-color: rgba(94, 121, 164, 0.25);
 }
 
@@ -453,8 +457,8 @@ body::after {
 }
 
 .work-card--teaching .work-card-face--front {
-  background: rgba(60, 141, 145, 0.12);
-  border-color: rgba(60, 141, 145, 0.28);
+  background: rgba(196, 215, 191, 0.25);
+  border-color: rgba(94, 132, 108, 0.25);
 }
 
 .card-back-label {
@@ -696,4 +700,12 @@ body::after {
   height: auto;
   display: block;
   margin-top: 0.1rem;
+}
+
+.card-dotglyph--studio svg {
+  width: 200px;
+}
+
+.card-dotglyph--laws svg {
+  width: 160px;
 }
