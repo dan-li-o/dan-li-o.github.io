@@ -286,8 +286,8 @@ body::after {
 }
 
 .mosaic-dot.is-muted {
-  opacity: 0.25;
-  filter: saturate(0.2);
+  opacity: 0.22;
+  background: var(--muted-color, var(--dot-color));
 }
 
 .order-glyph.is-ordered .mosaic-dot {
@@ -563,4 +563,25 @@ body::after {
   100% {
     opacity: 0;
   }
+}
+
+.mosaic-dot {
+  /* Force GPU acceleration */
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  
+  /* Smooth sub-pixel rendering */
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Optional: Add subtle CSS transition for ultra-smooth movement */
+.mosaic-dot {
+  transition: transform 0.1s linear;
+}
+
+.mosaic-field {
+  /* Contain repaints to this element */
+  contain: layout style paint;
+  transform: translateZ(0);
 }

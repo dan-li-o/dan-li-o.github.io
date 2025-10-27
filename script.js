@@ -28,6 +28,8 @@
 
   // runtime state
   let dots = [];
+  let travelerDots = []; // Separate array for dots that actually move
+  let staticDots = []; // Dots that never move
   let currentProgress = 0;
   let targetProgress = 0;
   let progressFrame = null;
@@ -45,7 +47,7 @@
   initNavHighlight();
   initYearStamp();
   initMosaicLazy();
-  handleScrollProgress(); // prime progress calc
+  handleScrollProgress();
 
   // ====== Reveal-on-scroll using IntersectionObserver ======
   function initRevealAnimations() {
@@ -123,7 +125,6 @@
       });
     }
 
-    // Build the mosaic only once: either on first scroll OR when fully loaded.
     function buildOnceIfNeeded() {
       if (mosaicBuilt) return;
       mosaicBuilt = true;
@@ -142,6 +143,8 @@
     // clear existing dots
     mosaicField.innerHTML = '';
     dots = [];
+    travelerDots = [];
+    staticDots = [];
 
     // measure + set layout vars
     const { width, scatterHeight, orderedHeight, orderOffsetY } =
@@ -156,12 +159,13 @@
     const tileW = width / cols;
     const orderedTileH = orderedHeight / rows;
 
-    // Batch all dots into a fragment
-    const frag = document.createDocumentFragment();
-
-    // Aggressive downsampling on narrow screens
+    // Keep original downsampling (not aggressive)
     const viewportWidth = window.innerWidth;
-    const mobileSkip = viewportWidth < 480 ? 3 : viewportWidth < 768 ? 2 : 1;
+    const mobileSkip = viewportWidth < 480 ? 2 : 1;
+
+    // Use TWO containers: one for static dots, one for animated
+    const staticFrag = document.createDocumentFragment();
+    const travelerFrag = document.createDocumentFragment();
 
     pattern.forEach((row, rowIdx) => {
       if (rowIdx % mobileSkip !== 0) return;
@@ -170,11 +174,9 @@
         if (colIdx % mobileSkip !== 0) return;
         if (tone === -1) return;
 
-        // create a dot
         const dot = document.createElement('span');
         dot.className = 'mosaic-dot';
 
-        // where this dot sits in the ordered (assembled) layout
         const orderXNum = colIdx * tileW + tileW / 2 - dotSize / 2;
         const orderYNum =
           orderOffsetY +
@@ -182,7 +184,6 @@
           orderedTileH / 2 -
           dotSize / 2;
 
-        // 10% of dots start as "travelers" (scattered then converge)
         const isTraveler = Math.random() < 0.1;
         const heroSpan = heroSection
           ? heroSection.offsetHeight
@@ -197,52 +198,70 @@
 
         const scatterXNum = scatterPoint.x;
         const scatterYNum = scatterPoint.y;
-
         const scatterScale = (0.6 + Math.random() * 0.8).toFixed(2);
         const startMuted = isTraveler;
-
         const orderColor = colorMap[tone] || colorMap[0];
 
-        // Set all CSS properties in one go
-        dot.style.cssText = `
-          --scatter-x:${scatterXNum}px;
-          --scatter-y:${scatterYNum}px;
-          --scatter-scale:${scatterScale};
-          --order-x:${orderXNum}px;
-          --order-y:${orderYNum}px;
-          --order-color:${orderColor};
-          --dot-color:${orderColor};
-        `;
+        // KEY OPTIMIZATION: Static dots get positioned once via transform
+        // Travelers use CSS variables that we'll update
+        if (isTraveler) {
+          dot.style.cssText = `
+            --scatter-x:${scatterXNum}px;
+            --scatter-y:${scatterYNum}px;
+            --scatter-scale:${scatterScale};
+            --order-x:${orderXNum}px;
+            --order-y:${orderYNum}px;
+            --order-color:${orderColor};
+            --dot-color:${orderColor};
+            --base-x:${scatterXNum}px;
+            --base-y:${scatterYNum}px;
+          `;
+          
+          if (startMuted) {
+            dot.classList.add('is-muted');
+          }
 
-        if (startMuted) {
-          dot.classList.add('is-muted');
+          const dotData = {
+            el: dot,
+            scatterX: scatterXNum,
+            scatterY: scatterYNum,
+            orderX: orderXNum,
+            orderY: orderYNum,
+            baseX: scatterXNum,
+            baseY: scatterYNum,
+            muted: startMuted,
+            revealThreshold: 0.2
+          };
+
+          travelerDots.push(dotData);
+          dots.push(dotData);
+          travelerFrag.appendChild(dot);
+        } else {
+          // Static dots: set transform directly, never update
+          dot.style.cssText = `
+            --order-color:${orderColor};
+            --dot-color:${orderColor};
+            transform: translate(${orderXNum}px, ${orderYNum}px);
+          `;
+
+          staticDots.push({ el: dot });
+          dots.push({ el: dot, traveler: false });
+          staticFrag.appendChild(dot);
         }
-
-        // keep per-dot state so we can animate with scroll
-        dots.push({
-          el: dot,
-          scatterX: scatterXNum,
-          scatterY: scatterYNum,
-          orderX: orderXNum,
-          orderY: orderYNum,
-          baseX: isTraveler ? scatterXNum : orderXNum,
-          baseY: isTraveler ? scatterYNum : orderYNum,
-          muted: startMuted,
-          traveler: isTraveler,
-          revealThreshold: isTraveler ? 0.2 : 0
-        });
-
-        frag.appendChild(dot);
       });
     });
 
-    // append to the live DOM once
-    mosaicField.appendChild(frag);
+    // Append static dots first (they never change)
+    mosaicField.appendChild(staticFrag);
+    
+    // Then travelers (we'll animate these)
+    mosaicField.appendChild(travelerFrag);
 
-    // Use will-change hint for smoother animations
+    console.log(`Built mosaic: ${staticDots.length} static, ${travelerDots.length} travelers`);
+
+    // Use CSS transform for animations (GPU accelerated)
     mosaicField.style.willChange = 'transform';
 
-    // initial positioning state
     const baseProgress = prefersReducedMotion ? 1 : calculateScrollProgress();
     currentProgress = baseProgress;
     targetProgress = baseProgress;
@@ -329,41 +348,44 @@
   function updateDotBases(progress) {
     const eased = easeInOut(progress);
 
-    // Batch DOM reads and writes
-    const updates = [];
+    // CRITICAL: Only update traveler dots (10% of total)
+    // This is the KEY optimization - 90% of dots never need updating!
     
-    dots.forEach((dot) => {
-      const baseX = dot.traveler
-        ? lerp(dot.scatterX, dot.orderX, eased)
-        : dot.orderX;
-      const baseY = dot.traveler
-        ? lerp(dot.scatterY, dot.orderY, eased)
-        : dot.orderY;
-
+    // Pre-calculate all positions first (batch reads)
+    const updates = new Array(travelerDots.length);
+    
+    for (let i = 0; i < travelerDots.length; i++) {
+      const dot = travelerDots[i];
+      const baseX = lerp(dot.scatterX, dot.orderX, eased);
+      const baseY = lerp(dot.scatterY, dot.orderY, eased);
+      
       dot.baseX = baseX;
       dot.baseY = baseY;
-
-      updates.push({
+      
+      updates[i] = {
         el: dot.el,
-        baseX,
-        baseY,
+        x: baseX,
+        y: baseY,
         shouldUnmute: dot.muted && eased >= dot.revealThreshold
-      });
-
-      if (dot.muted && eased >= dot.revealThreshold) {
+      };
+      
+      if (updates[i].shouldUnmute) {
         dot.muted = false;
       }
-    });
+    }
 
-    // Apply all DOM writes together
-    updates.forEach(({ el, baseX, baseY, shouldUnmute }) => {
-      el.style.setProperty('--base-x', `${baseX}px`);
-      el.style.setProperty('--base-y', `${baseY}px`);
+    // Now apply all DOM writes in one batch
+    // Using transform directly is fastest
+    for (let i = 0; i < updates.length; i++) {
+      const { el, x, y, shouldUnmute } = updates[i];
+      
+      // Single style property write
+      el.style.transform = `translate(${x.toFixed(2)}px, ${y.toFixed(2)}px)`;
       
       if (shouldUnmute) {
         el.classList.remove('is-muted');
       }
-    });
+    }
 
     setOrderState(eased);
   }
@@ -383,7 +405,6 @@
 
   // ====== Scroll progress handling ======
   function handleScrollProgress() {
-    // don't animate pre-build
     if (!mosaicBuilt && !prefersReducedMotion) return;
 
     if (!scrollTicking) {
@@ -425,15 +446,12 @@
     const heroStart = heroSection.offsetTop;
     const heroHeight = heroSection.offsetHeight || viewport;
 
-    // where we consider the mosaic "fully assembled"
     const finish = heroStart + heroHeight * 0.8;
-
     const range = Math.max(finish - heroStart, 1);
     const raw = (scrollY + viewport * 0.1 - heroStart) / range;
 
     return clamp(raw, 0, 1);
   }
 
-  // global scroll listener for morph animation
   window.addEventListener('scroll', handleScrollProgress, { passive: true });
 })();
