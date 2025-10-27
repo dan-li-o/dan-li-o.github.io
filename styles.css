@@ -394,10 +394,18 @@ body::after {
 }
 
 .card-front-line {
-  color: #b37f4a;
+  color: inherit;
   display: inline-flex;
   align-items: center;
   gap: 0.75rem;
+}
+
+.card-front-line + .card-front-line {
+  margin-left: 0.75rem;
+}
+
+.card-front-line--essay {
+  color: #b37f4a;
 }
 
 .card-dotnumber {
@@ -427,7 +435,7 @@ body::after {
 }
 
 .work-card--essays .work-card-face--front {
-  background: #fff9e5;
+  background: #fff9e5cc;
   border-color: rgba(214, 123, 113, 0.2);
 }
 
@@ -436,8 +444,8 @@ body::after {
 }
 
 .work-card--studio .work-card-face--front {
-  background: rgba(30, 41, 59, 0.12);
-  border-color: rgba(30, 41, 59, 0.28);
+  background: rgba(173, 198, 226, 0.5);
+  border-color: rgba(94, 121, 164, 0.25);
 }
 
 .work-card--teaching .card-front-title {
@@ -667,4 +675,25 @@ body::after {
   /* Contain repaints to this element */
   contain: layout style paint;
   transform: translateZ(0);
+}
+.card-letter {
+  display: inline-block;
+}
+
+.card-word {
+  display: inline-block;
+}
+
+.card-dotglyph {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 0.1rem;
+}
+
+.card-dotglyph svg {
+  width: 32px;
+  height: auto;
+  display: block;
+  margin-top: 0.1rem;
 }
