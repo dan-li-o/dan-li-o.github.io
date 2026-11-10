@@ -18,7 +18,7 @@ STATIC = ROOT / "static"   # anything here is published as-is (e.g. static/cv.pd
 
 TYPES = {"city", "school", "person", "field", "topic", "hobby", "work"}
 ALLOWED = {"id", "type", "label", "label_zh", "year", "end", "size", "links",
-           "url", "note", "private", "arrives"}
+           "url", "note", "private", "arrives", "short"}
 
 
 def fail(msg):

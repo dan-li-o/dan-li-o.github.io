@@ -31,7 +31,8 @@
   .node circle.cub{fill:none;stroke-dasharray:2 3;stroke-width:1.3;opacity:.9}
   .node text{font-size:11px;fill:var(--ink);pointer-events:none;paint-order:stroke;
     stroke:var(--bg);stroke-width:3px;stroke-linejoin:round;opacity:0;transition:opacity .2s}
-  .node.showlabel text{opacity:1}
+  .node.showlabel text.lab{opacity:1}
+  .node text.cap{font-size:12.5px;font-weight:500;opacity:0;transition:none;stroke-width:4px}
   .node:focus{outline:none}
   .node:focus-visible circle.dot{stroke:var(--ink);stroke-width:2.5}
   .dim{opacity:.12 !important}
@@ -225,8 +226,10 @@ function render(){
         .attr('role','button').attr('aria-label', d=>d.private ? d.type : d.label);
       e.append('circle').attr('class','dot').attr('r',0);
       e.filter(d=>d.cub).append('circle').attr('class','cub').attr('r',0);
-      e.append('text').attr('dy', d=>-(d.r+6)).attr('text-anchor','middle')
+      e.append('text').attr('class','lab').attr('dy', d=>-(d.r+6)).attr('text-anchor','middle')
         .text(d=> d.private ? '' : d.label);
+      e.filter(d=>(d.size||1)>=2 && !d.private).append('text').attr('class','cap')
+        .attr('dy', d=>-(d.r+7)).attr('text-anchor','middle').text(d=>d.short||d.label);
       e.call(drag())
         .on('pointerenter', (ev,d)=>showTip(ev,d))
         .on('pointermove', (ev,d)=>showTip(ev,d))
@@ -283,6 +286,12 @@ function addNode(n, animate){
     growLinks(newLinks, 0, 520);
     cub.transition().delay(300).duration(400).attr('r',n.r+4).attr('stroke',color(n));
   }
+  const cap = sel.select('text.cap');
+  if(!cap.empty()){
+    const start = n.arrives==='found' ? 650 : 250, hold = (n.size===3) ? 3000 : 1500;
+    cap.style('opacity',0).transition('cap').delay(start).duration(300).style('opacity',1)
+       .transition('cap').delay(hold).duration(700).style('opacity',0);
+  }
   sim.alpha(Math.max(sim.alpha(), .35)).restart();
   return 700;
 }
@@ -333,7 +342,7 @@ function playYear(){
   setYearLabel(current);
   const ns = yearNodes(current);
   let t = 0;
-  ns.forEach((n,i)=>{ setTimeout(()=>{ if(playing) addNode(n,true); }, t); t += 170; });
+  ns.forEach((n,i)=>{ setTimeout(()=>{ if(playing) addNode(n,true); }, t); t += (n.size||1)>=2 ? 420 : 170; });
   const wait = ns.length ? Math.max(650, t + 450) : 110;
   if(ns.length) setTimeout(()=>fit(true), t + 300);
   current++;
@@ -363,7 +372,7 @@ function hideTip(){ tip.style.opacity = 0; }
 
 let focused = null, catOn = null;
 function focus(d){
-  hideTip(); catOn = null; updateChips();
+  hideTip(); nodeSel.selectAll('text.cap').interrupt('cap').style('opacity',0); catOn = null; updateChips();
   focused = d;
   const nb = adj.get(d.id);
   nodeSel.classed('dim', n => n!==d && !nb.has(n.id)).classed('showlabel', n => n===d || nb.has(n.id));
