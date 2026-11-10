@@ -1,36 +1,16 @@
-# Quarto Website
+# dan-li-o.github.io
 
-This repo contains the source for a Quarto website to be published with GitHub Pages. The rendered site is not tracked (see `.gitignore`).
+Dan Li's personal site: one page, an animated network of the places, people,
+ideas and works in her life, built with D3.
 
-## Prerequisites
+- **Edit the content:** `data/network.yml` (see [HOW-TO-EDIT.md](HOW-TO-EDIT.md)).
+- **Build locally:** `pip install pyyaml && python3 tools/build.py`, then
+  `python3 -m http.server -d _site 8000` and open http://localhost:8000.
+- **Publish:** push to `main`. GitHub Actions checks the data, builds the page
+  and publishes it to the `gh-pages` branch. A data mistake stops the publish
+  and the live site stays as it was.
+- **Extra files** (a CV PDF, images) go in `static/` and are published at the
+  site root.
 
-- Install Quarto: https://quarto.org/docs/get-started/
-
-## Local development
-
-```bash
-quarto preview
-```
-
-## Build
-
-```bash
-quarto render
-```
-
-## Publish to GitHub Pages (gh-pages branch)
-
-This repo includes a GitHub Actions workflow that renders and publishes on pushes to `main`.
-
-1. Push this repo to GitHub (`dan-li-o/dan-li-o.github.io`).
-2. In the repo settings, set Pages to deploy from the `gh-pages` branch.
-3. Push any changes to `main`; the action will render and update `gh-pages`.
-
-Alternatively, you can publish locally using Quarto:
-
-```bash
-quarto publish gh-pages
-```
-
-This builds the site locally and pushes the rendered output to the `gh-pages` branch using the GitHub token.
-
+The book *Unlawful Laws* lives in its own repository and is served at
+`/3body`. Don't add a `3body` folder or page here, or it would hide the book.
