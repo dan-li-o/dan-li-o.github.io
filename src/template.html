@@ -171,7 +171,7 @@ const g = svg.append('g');
 const gl = g.append('g'), gn = g.append('g');
 let W = innerWidth, H = innerHeight;
 let userZoomed = false;
-const zoom = d3.zoom().scaleExtent([.25,4]).on('zoom', e=>{ g.attr('transform', e.transform); if(e.sourceEvent) userZoomed = true; });
+const zoom = d3.zoom().scaleExtent([.25,4]).on('zoom', e=>{ g.attr('transform', e.transform); if(e.sourceEvent) userZoomed = true; if(typeof recheckCaps==='function') recheckCaps(); });
 function fit(animate){
   if(userZoomed || !live.length) return;
   const narrow = W < 760, top = narrow ? 100 : 70, bottom = narrow ? 150 : 80, side = 24;
@@ -215,6 +215,7 @@ function tick(){
     .attr('x2', d=>d.source.x + (d.target.x-d.source.x)*d.p)
     .attr('y2', d=>d.source.y + (d.target.y-d.source.y)*d.p);
   nodeSel.attr('transform', d=>`translate(${d.x},${d.y})`);
+  recheckCaps();
 }
 
 function render(){
@@ -286,12 +287,7 @@ function addNode(n, animate){
     growLinks(newLinks, 0, 520);
     cub.transition().delay(300).duration(400).attr('r',n.r+4).attr('stroke',color(n));
   }
-  const cap = sel.select('text.cap');
-  if(!cap.empty()){
-    const start = n.arrives==='found' ? 650 : 250, hold = (n.size===3) ? 3000 : 1500;
-    cap.style('opacity',0).transition('cap').delay(start).duration(300).style('opacity',1)
-       .transition('cap').delay(hold).duration(700).style('opacity',0);
-  }
+  showCaption(n, sel, n.arrives==='found' ? 650 : 250);
   sim.alpha(Math.max(sim.alpha(), .35)).restart();
   return 700;
 }
@@ -303,7 +299,48 @@ function growLinks(ls, delay, dur){
   });
 }
 
+// --- passing captions that never overlap ------------------------------------
+const activeCaps = new Set();
+const overlaps = (a,b,p=4) => !(a.right+p < b.left || b.right+p < a.left || a.bottom+p < b.top || b.bottom+p < a.top);
+function placeCap(el, n){
+  const r = n.r, others = [...activeCaps].filter(e=>e!==el).map(e=>e.getBoundingClientRect());
+  const spots = [[0,-(r+7),'middle'],[0,r+16,'middle'],[r+6,4,'start'],[-(r+6),4,'end']];
+  for(const [x,y,a] of spots){
+    d3.select(el).attr('dy',null).attr('x',x).attr('y',y).attr('text-anchor',a);
+    const bb = el.getBoundingClientRect();
+    if(!others.some(o=>overlaps(bb,o))) return true;
+  }
+  return false;
+}
+function showCaption(n, sel, delay, tries=0){
+  const el = sel.select('text.cap').node(); if(!el) return;
+  setTimeout(()=>{
+    if(!n.shown || !playing) return;
+    if(!placeCap(el,n)){ if(tries<6) showCaption(n, sel, 350, tries+1); return; }  // wait for room
+    activeCaps.add(el);
+    const hold = n.size===3 ? 3000 : 1500;
+    d3.select(el).interrupt('cap').style('opacity',0)
+      .transition('cap').duration(300).style('opacity',1)
+      .transition('cap').delay(hold).duration(700).style('opacity',0)
+      .on('end', ()=>activeCaps.delete(el)).on('interrupt', ()=>activeCaps.delete(el));
+  }, delay);
+}
+let capTick = 0;
+function recheckCaps(){   // nodes keep drifting; move a caption if it starts to collide
+  if(++capTick % 8 || activeCaps.size < 2) return;
+  const els = [...activeCaps];
+  for(let i=1;i<els.length;i++){
+    const bb = els[i].getBoundingClientRect();
+    if(els.slice(0,i).some(e=>overlaps(bb, e.getBoundingClientRect()))){
+      const n = d3.select(els[i].parentNode).datum();
+      if(!placeCap(els[i], n)){ d3.select(els[i]).interrupt('cap').style('opacity',0); activeCaps.delete(els[i]); }
+    }
+  }
+}
+function clearCaps(){ nodeSel.selectAll('text.cap').interrupt('cap').style('opacity',0); activeCaps.clear(); }
+
 function resetAll(){
+  activeCaps.clear();
   userZoomed = false;
   live.length = 0; liveLinks.length = 0;
   nodes.forEach(n=>{n.shown=false; n.fx=n.fy=null;});
@@ -372,7 +409,7 @@ function hideTip(){ tip.style.opacity = 0; }
 
 let focused = null, catOn = null;
 function focus(d){
-  hideTip(); nodeSel.selectAll('text.cap').interrupt('cap').style('opacity',0); catOn = null; updateChips();
+  hideTip(); clearCaps(); catOn = null; updateChips();
   focused = d;
   const nb = adj.get(d.id);
   nodeSel.classed('dim', n => n!==d && !nb.has(n.id)).classed('showlabel', n => n===d || nb.has(n.id));

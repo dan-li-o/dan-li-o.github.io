@@ -614,6 +614,13 @@
   end: 2025
   links: [baruch, teaching, climate]
 
+- id: capstone
+  type: work
+  label: "Capstone: Scientific Methods in Paleoclimatology (Baruch)"
+  year: 2024           # CHECK: first year she taught it
+  note: co-taught interdisciplinary course
+  links: [baruch, teaching, treerings, climate]
+
 - id: phil101
   type: work
   label: "PHIL 101: Introduction to Philosophy (Queens)"
