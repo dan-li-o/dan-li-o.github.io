@@ -44,6 +44,9 @@
     font:italic 400 clamp(17px,2.4vw,24px)/1.3 Newsreader,Georgia,serif;color:var(--ink);
     opacity:0;transition:opacity 1.6s;padding:0 18px}
   #line.on{opacity:.8}
+  #line span{display:block}
+  #line .l2{font-size:.68em;margin-top:.35em;opacity:0;transition:opacity .3s}
+  #line.on .l2{opacity:.85;transition:opacity 1.4s 1.3s}
 
   /* controls */
   #bar{position:fixed;left:16px;right:16px;bottom:16px;display:flex;gap:10px;align-items:center;
@@ -101,7 +104,7 @@
 <body>
 <svg id="net" role="img" aria-label="A network of Dan Li's life: places, people, ideas and works, growing year by year from 1991. Open the CV list for the same information as text."></svg>
 <div id="year" aria-hidden="true">1991</div>
-<div id="line">I find network models the best to represent who I am.</div>
+<div id="line"><span class="l1">More than the sum of my connections.</span><span class="l2">Thank you for being one.</span></div>
 
 <button id="cvbtn" aria-label="Open the plain list of everything">CV ≡</button>
 
@@ -174,7 +177,7 @@ let userZoomed = false;
 const zoom = d3.zoom().scaleExtent([.25,4]).on('zoom', e=>{ g.attr('transform', e.transform); if(e.sourceEvent) userZoomed = true; if(typeof recheckCaps==='function') recheckCaps(); });
 function fit(animate){
   if(userZoomed || !live.length) return;
-  const narrow = W < 760, top = narrow ? 100 : 70, bottom = narrow ? 150 : 80, side = 24;
+  const narrow = W < 760, top = narrow ? 124 : 96, bottom = narrow ? 150 : 80, side = 24;
   const xs = live.map(n=>n.x), ys = live.map(n=>n.y);
   const x0 = Math.min(...xs)-14, x1 = Math.max(...xs)+14, y0 = Math.min(...ys)-14, y1 = Math.max(...ys)+14;
   const k = Math.min((W-2*side)/(x1-x0), (H-top-bottom)/(y1-y0), 1.4);
