@@ -31,6 +31,7 @@ Optional lines:
 | `end: 2030` | the year it ended (shown in the card) |
 | `size: 2` | 1 small (default), 2 medium, 3 large |
 | `note: one short line` | shown when someone taps it |
+| `short: Brief name` | for medium and large nodes: shown for a moment as the node arrives (defaults to the label) |
 | `url: https://...` | adds an "Open ↗" link |
 | `private: true` | shows the dot but hides the name |
 | `arrives: born` | grows out of its neighbor instead of fading in (works do this automatically) |
