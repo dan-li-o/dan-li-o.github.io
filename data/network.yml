@@ -1,0 +1,606 @@
+# Dan's network — DRAFT v11 for Dan to review (2026-11-10)
+#
+# How to read this:
+#   - Each "- id:" block is one node. Lines starting with # are notes, ignored by the site.
+#   - "# CHECK" marks a guess. Fix it or delete the line.
+#   - size: 1 small, 2 medium, 3 large. Leave it out and the node is 1.
+#   - links connect two nodes. List each link once, on either node.
+#   - private: true  -> the node shows, but its label stays hidden.
+#
+# Types: city | school | person | field | topic | hobby | work
+#   field = an academic discipline (big idea node)
+#   topic = a specific subject inside a field
+
+
+# ───────────── PLACES ─────────────
+
+- id: xian
+  type: city
+  label: Xi'an
+  label_zh: 西安
+  year: 1991
+  end: 2009
+  size: 3
+  note: Shaanxi, where it starts
+
+- id: hefei
+  type: city
+  label: Hefei
+  label_zh: 合肥
+  year: 2009
+  end: 2014
+  links: [xian]
+
+- id: ustc
+  type: school
+  label: University of Science and Technology of China
+  label_zh: 中国科学技术大学
+  year: 2009
+  end: 2014
+  size: 2
+  links: [hefei, engineering]
+
+- id: shanghai
+  type: city
+  label: Shanghai
+  label_zh: 上海
+  year: 2014
+  end: 2015
+  note: worked at an edtech company; also home in Xi'an
+  links: [hefei, xian]
+
+- id: beijing
+  type: city
+  label: Beijing
+  label_zh: 北京
+  year: 2015
+  end: 2017
+  links: [shanghai]
+
+- id: pku
+  type: school
+  label: Peking University
+  label_zh: 北京大学
+  year: 2015
+  end: 2018            # degree finished 2018
+  size: 2
+  links: [beijing, histsci]
+
+- id: bloomington
+  type: city
+  label: Bloomington
+  year: 2017
+  end: 2022
+  links: [beijing]
+
+- id: indiana
+  type: school
+  label: Indiana University
+  year: 2017
+  end: 2023
+  size: 2
+  links: [bloomington, philsci]
+
+- id: boulder
+  type: city
+  label: Boulder
+  year: 2021
+  end: 2021
+  note: visiting student at NCAR
+  links: [bloomington, climate]
+
+- id: newyork
+  type: city
+  label: New York
+  year: 2022
+  size: 2
+  links: [bloomington]
+
+- id: baruch
+  type: school
+  label: Baruch College, CUNY
+  year: 2023
+  end: 2025
+  links: [newyork]
+
+- id: queens
+  type: school
+  label: Queens College, CUNY
+  year: 2023           # PHIL 101 in 2023; adjunct assistant professor 2026
+  links: [newyork]
+
+
+# ───────────── FAMILY ─────────────
+# Children appear by nickname, each marked as a human cub.
+
+- id: mom
+  type: person
+  label: Mom
+  year: 1991
+  size: 3
+  note: mechanical engineer
+  links: [xian, engineering]
+
+- id: dad
+  type: person
+  label: Dad
+  year: 1991
+  size: 3
+  note: mechanical engineer
+  links: [xian, engineering, mom]
+
+- id: ryan
+  type: person
+  label: Ryan O'Loughlin
+  year: 2017
+  size: 3
+  note: met at Indiana; also Lisa Lloyd's student
+  url: https://ryanoloughlin.org
+  links: [indiana, robustness, lloyd, philsci, climate, ai, logic, goofing]
+
+- id: mila
+  type: person
+  label: Millie
+  year: 2022
+  size: 3
+  note: a human cub
+  links: [ryan, newyork, reading, goofing]
+
+- id: luke
+  type: person
+  label: Lulu
+  year: 2025
+  size: 3
+  note: a human cub
+  links: [ryan, mila, newyork, goofing]
+
+
+# ───────────── ADVISORS AND COLLEAGUES ─────────────
+
+- id: yehong
+  type: person
+  label: Ye Hong
+  label_zh: 叶宏
+  year: 2013
+  note: advisor at USTC
+  url: http://faculty.ustc.edu.cn/yehong/zh_CN/index.htm
+  links: [ustc, thermo, engineering]
+
+- id: wuguosheng
+  type: person
+  label: Wu Guosheng
+  label_zh: 吴国盛
+  year: 2015
+  note: advisor at Peking University
+  url: https://www.dhs.tsinghua.edu.cn/en/?p=549   # his Tsinghua page; no wuguosheng.com found
+  links: [pku, histsci, philsci]
+
+- id: lloyd
+  type: person
+  label: Elisabeth Lloyd
+  year: 2017
+  size: 3
+  note: advisor at Indiana
+  url: https://hpsc.indiana.edu/about/emeriti-faculty/lloyd-elisabeth.html
+  links: [indiana, philsci, climate, feminism, robustness]
+
+- id: hagar
+  type: person
+  label: Amit Hagar
+  year: 2017
+  note: philosopher of physics
+  url: https://hpsc.indiana.edu/about/faculty/hagar-amit.html
+  links: [indiana, philsci, philphys, ai]
+
+- id: obrien
+  type: person
+  label: Travis O'Brien
+  year: 2020
+  size: 2
+  url: https://earth.indiana.edu/directory/faculty/obrien-travis.html
+  links: [indiana, climate, ai]
+
+- id: kravitz
+  type: person
+  label: Ben Kravitz
+  year: 2019           # joined IU in 2019
+  size: 2
+  url: https://earth.indiana.edu/directory/faculty/kravitz-ben.html
+  links: [indiana, climate]
+
+- id: flammini
+  type: person
+  label: Alessandro Flammini
+  year: 2020
+  url: https://luddy.iu.edu/people/flammini-alessandro.html
+  links: [informatics, networks, physics]
+
+- id: radicchi
+  type: person
+  label: Filippo Radicchi
+  year: 2020
+  url: https://homes.luddy.indiana.edu/filiradi/   # CHECK: link works?
+  links: [informatics, networks, physics]
+
+- id: neale
+  type: person
+  label: Rich Neale
+  note: NCAR climate modeler
+  year: 2021
+  links: [boulder, climate]
+
+
+# ───────────── FRIENDS ─────────────
+
+- id: suxingchi
+  type: person
+  label: Xingchi Su
+  year: 2015
+  note: logician; at PKU 2015–2018, like Dan; now at Zhejiang University
+  url: https://orcid.org/0000-0002-1998-8392   # swap for a ZJU page if he has one
+  links: [pku, logic, badminton]
+
+- id: zhaoyulei
+  type: person
+  label: Yulei Zhao
+  year: 2015
+  # no profile found online; add a url if she has one
+  links: [pku, badminton]
+
+- id: arnet
+  type: person
+  label: Evan Arnet
+  year: 2017
+  note: fellow student of Lisa Lloyd
+  url: https://independent.academia.edu/EvanArnet
+  links: [indiana, lloyd, philsci, histsci]
+
+- id: yanghaici
+  type: person
+  label: Haici Yang
+  label_zh: 杨海慈
+  year: 2018
+  note: AI scientist; also at PKU, but met at IU
+  url: https://haiciyang.github.io
+  links: [indiana, ai, networks]
+
+- id: yaosiyu
+  type: person
+  label: Siyu Yao
+  label_zh: 姚思羽
+  year: 2019
+  note: philosopher of science; also at PKU, but met at IU
+  url: https://philpeople.org/profiles/siyu-yao
+  links: [indiana, philsci, ai, hagar]
+
+
+# ───────────── FIELDS (academic disciplines) ─────────────
+
+- id: math
+  type: field
+  label: Mathematics
+  year: 2003
+  size: 2
+  links: [xian, informatics, ai, networks, engineering]
+
+- id: physics
+  type: field
+  label: Physics
+  year: 2005
+  size: 2
+  links: [xian, math, scientist, thermo, fluids, networks]
+
+- id: engineering
+  type: field
+  label: Mechanical engineering
+  year: 2009
+  end: 2014
+  size: 2
+  links: [physics]
+
+- id: histsci
+  type: field
+  label: History of science
+  year: 2015
+  size: 2
+
+- id: feminism
+  type: field
+  label: Feminism
+  year: 2015
+  links: [pku]
+
+- id: philsci
+  type: field
+  label: Philosophy of science
+  year: 2014
+  size: 3
+  links: [histsci, pku, ai, feminism]
+
+- id: logic
+  type: field
+  label: Logic
+  year: 2015
+  note: through Xingchi and Ryan
+  links: [philsci, math]
+
+- id: philphys
+  type: field
+  label: Philosophy of physics
+  year: 2017
+  note: through Amit Hagar
+  links: [philsci, physics]
+
+- id: informatics
+  type: field
+  label: Informatics
+  year: 2020
+  size: 2
+  links: [indiana, programming]
+
+- id: climate
+  type: field
+  label: Climate science
+  year: 2019
+  size: 3
+  links: [philsci, physics]
+
+
+# ───────────── TOPICS (inside a field) ─────────────
+
+- id: thermo
+  type: topic
+  label: Thermodynamics
+  year: 2009
+  links: [engineering, climate]
+
+- id: heat
+  type: topic
+  label: Heat transfer
+  year: 2013
+  links: [engineering, thermo, yehong, climate]
+
+- id: fluids
+  type: topic
+  label: Fluid dynamics
+  year: 2013
+  links: [engineering, climate]
+
+- id: programming
+  type: topic
+  label: Programming
+  year: 2010
+  note: C at USTC in 2010; picked up again at IU in 2019
+  links: [ustc, indiana, engineering, ai]
+
+- id: teaching
+  type: topic
+  label: Teaching
+  year: 2015
+  size: 2
+  note: from TA at PKU to her own courses at Indiana, Baruch and Queens
+
+- id: histmed
+  type: topic
+  label: History of medicine
+  year: 2016
+  links: [histsci, feminism]
+
+- id: ai
+  type: topic
+  label: Machine learning and AI
+  year: 2017
+  size: 2
+  links: [informatics, climate, induction, networks]
+
+- id: networks
+  type: topic
+  label: Network science
+  year: 2020           # from the CV (Network Science Institute fellowship)
+  size: 2
+  links: [informatics, climate]
+
+- id: dataviz
+  type: topic
+  label: Data visualization
+  year: 2021
+  links: [informatics, networks, art]
+
+- id: induction
+  type: topic
+  label: Induction
+  year: 2018
+  size: 2
+  links: [philsci, logic]
+
+- id: robustness
+  type: topic
+  label: Models and robustness
+  year: 2019
+  links: [philsci, climate, uncertainty]
+
+- id: treerings
+  type: topic
+  label: Tree rings and paleoclimate
+  year: 2019
+  links: [climate]
+
+- id: uncertainty
+  type: topic
+  label: Living with uncertainty
+  year: 2024
+  size: 2
+  links: [philsci, induction, climate]
+
+
+# ───────────── HOBBIES ─────────────
+
+- id: reading
+  type: hobby
+  label: Reading everything
+  year: 1991
+  size: 3
+  links: [xian]
+
+- id: goofing
+  type: hobby
+  label: Goofing around
+  year: 1991
+  size: 3
+  note: a big part of her life
+  links: [xian]
+
+- id: art
+  type: hobby
+  label: Art
+  year: 1991
+  size: 2
+  note: since she was little
+  links: [xian]
+
+- id: badminton
+  type: hobby
+  label: Badminton
+  year: 2013
+  note: started at USTC; played with Yulei and Xingchi at PKU
+  links: [ustc, pku]
+
+- id: scientist
+  type: hobby
+  label: Wanting to be a scientist
+  year: 2005
+  size: 2
+  note: since age 14
+  links: [reading]
+
+- id: threebody
+  type: hobby
+  label: The Three-Body Problem
+  label_zh: 三体
+  year: 2012
+  size: 2
+  links: [reading, hefei, physics]
+
+- id: japanese
+  type: hobby
+  label: Japanese
+  label_zh: 日本語
+  year: 2010
+  note: JLPT N3
+  links: [ustc]
+
+
+# ───────────── WORKS ─────────────
+
+- id: edtech
+  type: work
+  label: Working in edtech
+  year: 2014
+  end: 2015
+  links: [shanghai, teaching]
+
+- id: pms
+  type: work
+  label: The Medicalization of Premenstrual Syndrome
+  year: 2017
+  links: [histmed, feminism]
+
+- id: synthese2022
+  type: work
+  label: Model robustness in economics (Synthese)
+  year: 2022
+  url: https://doi.org/10.1007/s11229-022-03608-y
+  links: [robustness, ryan]
+
+- id: treerings2022
+  type: work
+  label: If a tree grows no ring… (Climatic Change)
+  year: 2022
+  size: 3
+  url: https://doi.org/10.1007/s10584-022-03424-w
+  note: won the Hanson Prize as a paper in 2021
+  links: [treerings]
+
+- id: dissertation
+  type: work
+  label: "Frontiers in Climate Science: Inquiries into Data and Methods"
+  year: 2023
+  size: 3
+  links: [climate, lloyd, obrien, indiana]
+
+- id: mm2023
+  type: work
+  label: Machines learn better with better data ontology (Minds and Machines)
+  year: 2023
+  size: 3
+  url: https://doi.org/10.1007/s11023-023-09639-9
+  links: [ai, induction]
+
+- id: sterile
+  type: work
+  label: The Elements of Sterile (Inside Higher Ed)
+  year: 2023
+  note: satire on academic writing
+  links: [goofing]
+
+- id: gmd2025
+  type: work
+  label: Moving beyond post hoc XAI (Geoscientific Model Development)
+  year: 2025
+  size: 2
+  url: https://doi.org/10.5194/gmd-18-787-2025
+  links: [ai, climate, ryan, obrien, neale]
+
+- id: unlawful
+  type: work
+  label: "Unlawful Laws: How to Live with Scientific Uncertainty"
+  year: 2024
+  size: 3
+  url: https://dan-li-o.github.io/3body
+  links: [threebody, uncertainty, induction, climate, physics, math, philphys, philsci]
+
+
+
+# ───────────── TEACHING (courses) ─────────────
+
+- id: pku306
+  type: work
+  label: "PHIL 306: History of Science (TA, PKU)"
+  year: 2015
+  end: 2017
+  note: Wu Guosheng's course
+  links: [pku, teaching, histsci, wuguosheng]
+
+- id: hpsc200
+  type: work
+  label: "HPSC 200: Scientific Reasoning (Indiana)"
+  year: 2019
+  end: 2020
+  links: [indiana, teaching, philsci]
+
+- id: phi1500
+  type: work
+  label: "PHI 1500: Major Issues in Philosophy (Baruch)"
+  year: 2023
+  end: 2025
+  links: [baruch, teaching]
+
+- id: phi3200
+  type: work
+  label: "PHI 3200: Environmental Ethics, Law, and Public Policy (Baruch)"
+  year: 2024
+  end: 2025
+  links: [baruch, teaching, climate]
+
+- id: phil101
+  type: work
+  label: "PHIL 101: Introduction to Philosophy (Queens)"
+  year: 2023
+  links: [queens, teaching, philsci]
+
+- id: phil106
+  type: work
+  label: "PHIL 106: The Three-Body Problem (Queens)"
+  year: 2026
+  size: 2
+  links: [queens, teaching, unlawful, threebody]

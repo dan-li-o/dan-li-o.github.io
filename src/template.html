@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dan Li</title>
+<meta name="description" content="Dan Li, philosopher of science: AI, machine learning and climate science. A network of the places, people, ideas and works in her life.">
+<meta property="og:title" content="Dan Li">
+<meta property="og:description" content="A network of the places, people, ideas and works in Dan Li's life.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Newsreader:ital,opsz,wght@1,6..72,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f7f5f0; --ink:#26241f; --muted:#8a857b; --line:#d9d4c8; --ghost:#c9c4b8;
+    --place:#3e7cb1; --people:#d1603d; --ideas:#5b9a68; --works:#8a5fbf;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{ --bg:#151513; --ink:#ece8df; --muted:#8f8a80; --line:#3a3833; --ghost:#55524b;
+      --place:#6fa6d6; --people:#e98a66; --ideas:#83c191; --works:#b493e0; }
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);
+    font:14px/1.45 Inter,system-ui,-apple-system,sans-serif;overflow:hidden;
+    -webkit-tap-highlight-color:transparent}
+  svg#net{position:fixed;inset:0;width:100%;height:100%;touch-action:none;cursor:grab}
+  svg#net:active{cursor:grabbing}
+  .link{stroke:var(--line);stroke-width:1.2;fill:none}
+  .node circle.dot{stroke:var(--bg);stroke-width:1.5;cursor:pointer;transition:opacity .25s}
+  .node.school circle.dot{stroke:var(--place);stroke-width:2.2}
+  .node circle.cub{fill:none;stroke-dasharray:2 3;stroke-width:1.3;opacity:.9}
+  .node text{font-size:11px;fill:var(--ink);pointer-events:none;paint-order:stroke;
+    stroke:var(--bg);stroke-width:3px;stroke-linejoin:round;opacity:0;transition:opacity .2s}
+  .node.showlabel text{opacity:1}
+  .node:focus{outline:none}
+  .node:focus-visible circle.dot{stroke:var(--ink);stroke-width:2.5}
+  .dim{opacity:.12 !important}
+  .link.hot{stroke:var(--muted);stroke-width:1.6}
+
+  #year{position:fixed;left:22px;bottom:70px;font:500 56px/1 Inter,system-ui,sans-serif;
+    color:var(--ink);opacity:.09;pointer-events:none;letter-spacing:-.02em}
+  #line{position:fixed;left:0;right:0;top:28px;text-align:center;pointer-events:none;
+    font:italic 400 clamp(17px,2.4vw,24px)/1.3 Newsreader,Georgia,serif;color:var(--ink);
+    opacity:0;transition:opacity 1.6s;padding:0 18px}
+  #line.on{opacity:.8}
+
+  /* controls */
+  #bar{position:fixed;left:16px;right:16px;bottom:16px;display:flex;gap:10px;align-items:center;
+    flex-wrap:wrap}
+  button,.chip{font:500 12px Inter,system-ui,sans-serif;color:var(--ink);background:transparent;
+    border:1px solid var(--line);border-radius:999px;padding:6px 11px;cursor:pointer;
+    display:inline-flex;align-items:center;gap:6px;min-height:30px}
+  button:hover,.chip:hover{border-color:var(--muted)}
+  .chip i{width:9px;height:9px;border-radius:50%;display:inline-block}
+  .chip.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+  #scrub{flex:1;min-width:120px;accent-color:var(--muted)}
+  #chips{display:flex;gap:6px;flex-wrap:wrap}
+  .sep{flex-basis:100%;height:0}
+  @media (min-width:760px){ .sep{display:none} }
+
+  /* top-right */
+  #cvbtn{position:fixed;top:16px;right:16px;font-size:12px;letter-spacing:.06em}
+
+  /* card */
+  #card{position:fixed;left:16px;top:16px;padding-right:34px !important;max-width:min(340px,calc(100vw - 32px));
+    background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px 14px;
+    box-shadow:0 6px 24px rgba(0,0,0,.08);display:none}
+  #card.on{display:block}
+  #card .t{font-weight:500;font-size:15px;margin:0 0 2px}
+  #card .m{color:var(--muted);font-size:12px;margin:0 0 6px}
+  #card .n{margin:0 0 8px}
+  #card a{color:var(--ink);font-size:13px}
+  #card .x{position:absolute;right:8px;top:6px;border:0;padding:4px 6px;min-height:0;color:var(--muted)}
+
+  #tip{position:fixed;pointer-events:none;background:var(--ink);color:var(--bg);font-size:12px;
+    padding:4px 8px;border-radius:6px;opacity:0;transition:opacity .12s;white-space:nowrap;max-width:70vw;
+    overflow:hidden;text-overflow:ellipsis}
+
+  /* list panel */
+  #list{position:fixed;inset:0;background:var(--bg);overflow:auto;padding:56px 24px 40px;display:none}
+  #list.on{display:block}
+  #list .wrap{max-width:720px;margin:0 auto}
+  #list h1{font:500 22px Inter,system-ui,sans-serif;margin:0 0 4px}
+  #list h2{font:500 12px Inter,system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--muted);margin:28px 0 8px}
+  #list ul{list-style:none;padding:0;margin:0}
+  #list li{padding:6px 0;border-bottom:1px solid var(--line);display:flex;gap:12px}
+  #list li .y{color:var(--muted);min-width:84px;font-variant-numeric:tabular-nums}
+  #list li .nt{color:var(--muted)}
+  #list a{color:var(--ink)}
+  #closelist{position:fixed;top:16px;right:16px}
+
+  #help{position:fixed;right:16px;bottom:64px;color:var(--muted);font-size:11px;text-align:right;
+    pointer-events:none;opacity:0;transition:opacity 1s}
+  #help.on{opacity:1}
+  @media (max-width:759px){ #help{display:none} #year{bottom:118px;font-size:40px}
+    #line{top:62px} #card{top:56px} }
+</style>
+</head>
+<body>
+<svg id="net" role="img" aria-label="A network of Dan Li's life: places, people, ideas and works, growing year by year from 1991. Open the CV list for the same information as text."></svg>
+<div id="year" aria-hidden="true">1991</div>
+<div id="line">I find network models the best to represent who I am.</div>
+
+<button id="cvbtn" aria-label="Open the plain list of everything">CV ≡</button>
+
+<div id="card" role="dialog" aria-live="polite">
+  <button class="x" aria-label="Close">✕</button>
+  <p class="t"></p><p class="m"></p><p class="n"></p><a target="_blank" rel="noopener"></a>
+</div>
+<div id="tip"></div>
+<div id="help">drag to move · double-click to release · tap a node to focus</div>
+
+<div id="bar">
+  <button id="play" aria-label="Pause">❚❚</button>
+  <input id="scrub" type="range" min="1991" max="2026" step="1" value="1991" aria-label="Year">
+  <button id="skip">Skip</button>
+  <div class="sep"></div>
+  <div id="chips">
+    <span class="chip" data-g="places" role="button" tabindex="0"><i style="background:var(--place)"></i>Places</span>
+    <span class="chip" data-g="people" role="button" tabindex="0"><i style="background:var(--people)"></i>People</span>
+    <span class="chip" data-g="ideas" role="button" tabindex="0"><i style="background:var(--ideas)"></i>Ideas</span>
+    <span class="chip" data-g="works" role="button" tabindex="0"><i style="background:var(--works)"></i>Works</span>
+  </div>
+  <button id="cluster" aria-pressed="false">Sort</button>
+</div>
+
+<div id="list" aria-hidden="true"><button id="closelist">Close ✕</button><div class="wrap"></div></div>
+
+<noscript><div style="max-width:720px;margin:40px auto;padding:0 20px">__NOSCRIPT__</div></noscript>
+<script type="text/yaml" id="data">
+__YAML__
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script>
+(function(){
+const raw = jsyaml.load(document.getElementById('data').textContent);
+const START = 1991, END = 2026;
+const GROUP = {city:'places',school:'places',person:'people',field:'ideas',topic:'ideas',hobby:'ideas',work:'works'};
+const COLORVAR = {places:'--place',people:'--people',ideas:'--ideas',works:'--works'};
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const R = s => ({1:5,2:8,3:12})[s||1];
+const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// nodes
+const nodes = raw.map(d => ({
+  ...d, group: GROUP[d.type]||'ideas', r: R(d.size),
+  arrives: d.arrives || (d.type==='work' || d.note==='a human cub' ? 'born' : 'found'),
+  cub: d.note==='a human cub'
+}));
+const byId = new Map(nodes.map(n=>[n.id,n]));
+const links = [];
+const seen = new Set();
+nodes.forEach(n => (n.links||[]).forEach(t => {
+  if(!byId.has(t)) return;
+  const k = [n.id,t].sort().join('|'); if(seen.has(k)) return; seen.add(k);
+  links.push({id:k, source:n.id, target:t, year: Math.max(n.year, byId.get(t).year), p:0});
+}));
+const adj = new Map(nodes.map(n=>[n.id,new Set()]));
+links.forEach(l=>{adj.get(l.source).add(l.target); adj.get(l.target).add(l.source);});
+const color = n => css(COLORVAR[n.group]);
+const fillFor = n => (n.type==='school') ? css('--bg') : color(n);
+const fop = n => n.type==='hobby' ? .55 : 1;
+const ghost = () => css('--ghost');
+
+// svg
+const svg = d3.select('#net');
+const g = svg.append('g');
+const gl = g.append('g'), gn = g.append('g');
+let W = innerWidth, H = innerHeight;
+let userZoomed = false;
+const zoom = d3.zoom().scaleExtent([.25,4]).on('zoom', e=>{ g.attr('transform', e.transform); if(e.sourceEvent) userZoomed = true; });
+function fit(animate){
+  if(userZoomed || !live.length) return;
+  const narrow = W < 760, top = narrow ? 100 : 70, bottom = narrow ? 150 : 80, side = 24;
+  const xs = live.map(n=>n.x), ys = live.map(n=>n.y);
+  const x0 = Math.min(...xs)-14, x1 = Math.max(...xs)+14, y0 = Math.min(...ys)-14, y1 = Math.max(...ys)+14;
+  const k = Math.min((W-2*side)/(x1-x0), (H-top-bottom)/(y1-y0), 1.4);
+  const tx = side + ((W-2*side) - k*(x1-x0))/2 - k*x0, ty = top + ((H-top-bottom) - k*(y1-y0))/2 - k*y0;
+  const t = d3.zoomIdentity.translate(tx,ty).scale(k);
+  (animate ? svg.transition().duration(700) : svg).call(zoom.transform, t);
+}
+svg.call(zoom).on('dblclick.zoom', null);
+svg.on('click', e => { if(e.target === svg.node()) clearFocus(); });
+
+const live = [], liveLinks = [];
+const sc = () => Math.max(.6, Math.min(1, Math.min(W,H)/700));
+const sim = d3.forceSimulation(live)
+  .force('link', d3.forceLink(liveLinks).id(d=>d.id).distance(l=>(34 + l.source.r + l.target.r)*sc()).strength(.5))
+  .force('charge', d3.forceManyBody().strength(d=>(-60 - d.r*9)*sc()))
+  .force('collide', d3.forceCollide(d=>d.r+4))
+  .force('x', d3.forceX(W/2).strength(.04))
+  .force('y', d3.forceY(H/2).strength(.05))
+  .alphaDecay(.02)
+  .on('tick', tick)
+  .on('end', ()=>fit(true));
+
+// cluster anchors
+let clustered = false;
+const anchors = () => ({places:[W*.28,H*.32], people:[W*.72,H*.32], ideas:[W*.28,H*.68], works:[W*.72,H*.68]});
+function setForces(){
+  const a = anchors();
+  sim.force('x').x(d=> clustered ? a[d.group][0] : W/2).strength(clustered ? .22 : .04);
+  sim.force('y').y(d=> clustered ? a[d.group][1] : H/2).strength(clustered ? .22 : .05);
+  sim.alpha(.6).restart();
+}
+
+let linkSel = gl.selectAll('line'), nodeSel = gn.selectAll('g.node');
+
+function tick(){
+  linkSel
+    .attr('x1', d=>d.source.x).attr('y1', d=>d.source.y)
+    .attr('x2', d=>d.source.x + (d.target.x-d.source.x)*d.p)
+    .attr('y2', d=>d.source.y + (d.target.y-d.source.y)*d.p);
+  nodeSel.attr('transform', d=>`translate(${d.x},${d.y})`);
+}
+
+function render(){
+  linkSel = gl.selectAll('line').data(liveLinks, d=>d.id)
+    .join(enter=>enter.append('line').attr('class','link'));
+  nodeSel = gn.selectAll('g.node').data(live, d=>d.id)
+    .join(enter=>{
+      const e = enter.append('g').attr('class', d=>'node'+(d.type==='school'?' school':'')).attr('tabindex',0)
+        .attr('role','button').attr('aria-label', d=>d.private ? d.type : d.label);
+      e.append('circle').attr('class','dot').attr('r',0);
+      e.filter(d=>d.cub).append('circle').attr('class','cub').attr('r',0);
+      e.append('text').attr('dy', d=>-(d.r+6)).attr('text-anchor','middle')
+        .text(d=> d.private ? '' : d.label);
+      e.call(drag())
+        .on('pointerenter', (ev,d)=>showTip(ev,d))
+        .on('pointermove', (ev,d)=>showTip(ev,d))
+        .on('pointerleave', hideTip)
+        .on('click', (ev,d)=>{ev.stopPropagation(); focus(d);})
+        .on('keydown', (ev,d)=>{ if(ev.key==='Enter'||ev.key===' '){ev.preventDefault(); focus(d);} })
+        .on('dblclick', (ev,d)=>{ev.stopPropagation(); d.fx=d.fy=null; sim.alpha(.3).restart();});
+      return e;
+    });
+  sim.nodes(live);
+  sim.force('link').links(liveLinks);
+}
+
+// --- arrivals ---------------------------------------------------------
+function placeNear(n){
+  const nb = [...adj.get(n.id)].map(id=>byId.get(id)).filter(m=>m.shown);
+  if(nb.length){
+    const cx = d3.mean(nb,m=>m.x), cy = d3.mean(nb,m=>m.y);
+    if(n.arrives==='born'){ n.x = cx; n.y = cy; }
+    else { const a = Math.random()*Math.PI*2, d = 60 + Math.random()*40; n.x = cx + Math.cos(a)*d; n.y = cy + Math.sin(a)*d; }
+  } else { n.x = W/2 + (Math.random()-.5)*80; n.y = H/2 + (Math.random()-.5)*80; }
+  n.vx = n.vy = 0;
+}
+
+function addNode(n, animate){
+  n.shown = true; placeNear(n); live.push(n);
+  const newLinks = links.filter(l => !l.shown &&
+     (l.source===n.id||l.target===n.id||l.source.id===n.id||l.target.id===n.id) &&
+     byId.get(typeof l.source==='object'?l.source.id:l.source).shown &&
+     byId.get(typeof l.target==='object'?l.target.id:l.target).shown);
+  // links should draw FROM the existing node TO the arriving one
+  newLinks.forEach(l=>{
+    const s = typeof l.source==='object'?l.source.id:l.source, t = typeof l.target==='object'?l.target.id:l.target;
+    if(s===n.id){ l.source = t; l.target = s; }
+    l.shown = true; l.p = animate ? 0 : 1; liveLinks.push(l);
+  });
+  render();
+  const sel = nodeSel.filter(d=>d===n);
+  const dot = sel.select('circle.dot'), cub = sel.select('circle.cub');
+  if(!animate){
+    dot.attr('r',n.r).attr('fill',fillFor(n)).attr('fill-opacity',fop(n));
+    cub.attr('r',n.r+4).attr('stroke',color(n));
+    return 0;
+  }
+  if(n.arrives==='found'){
+    // ghost first, then the line reaches it, then it takes its colour
+    dot.attr('fill',ghost()).transition().duration(350).attr('r',n.r*.8)
+      .transition().delay(380).duration(320).attr('r',n.r).attr('fill',fillFor(n)).attr('fill-opacity',fop(n));
+    growLinks(newLinks, 330, 420);
+    cub.transition().delay(700).duration(300).attr('r',n.r+4).attr('stroke',color(n));
+  } else {
+    // born: grows out of the node it comes from
+    dot.attr('fill',fillFor(n)).attr('fill-opacity',fop(n)).transition().duration(520).ease(d3.easeBackOut.overshoot(1.6)).attr('r',n.r);
+    growLinks(newLinks, 0, 520);
+    cub.transition().delay(300).duration(400).attr('r',n.r+4).attr('stroke',color(n));
+  }
+  sim.alpha(Math.max(sim.alpha(), .35)).restart();
+  return 700;
+}
+
+function growLinks(ls, delay, dur){
+  ls.forEach(l=>{
+    d3.transition().delay(delay).duration(dur).ease(d3.easeCubicOut)
+      .tween('grow', ()=> t => { l.p = t; tick(); });
+  });
+}
+
+function resetAll(){
+  userZoomed = false;
+  live.length = 0; liveLinks.length = 0;
+  nodes.forEach(n=>{n.shown=false; n.fx=n.fy=null;});
+  links.forEach(l=>{l.shown=false; l.source = typeof l.source==='object'?l.source.id:l.source;
+    l.target = typeof l.target==='object'?l.target.id:l.target;});
+  gl.selectAll('*').remove(); gn.selectAll('*').remove();
+  render(); clearFocus();
+  document.getElementById('line').classList.remove('on');
+}
+
+// order within a year: found before born, then by how many links reach already-shown nodes
+function yearNodes(y){
+  // nodes already tied to the past come first, so things that arrive *through* someone (logic via Xingchi) follow them
+  const anchored = n => [...adj.get(n.id)].filter(id=>byId.get(id).year < y).length;
+  return nodes.filter(n=>n.year===y && !n.shown)
+    .sort((a,b)=> (a.arrives==='born') - (b.arrives==='born') || (anchored(b)>0) - (anchored(a)>0) || (b.size||1)-(a.size||1));
+}
+
+function jumpTo(y){
+  resetAll();
+  for(let yy=START; yy<=y; yy++) yearNodes(yy).forEach(n=>addNode(n,false));
+  current = y; setYearLabel(y);
+  sim.alpha(.9).restart();
+  sim.tick(120); tick(); fit(false);
+  if(y>=END) finish();
+}
+
+// --- playback ---------------------------------------------------------
+let current = START, playing = false, timer = null;
+const yearEl = document.getElementById('year'), scrub = document.getElementById('scrub'), playBtn = document.getElementById('play');
+function setYearLabel(y){ yearEl.textContent = y; scrub.value = y; }
+
+function playYear(){
+  if(!playing) return;
+  if(current > END){ stop(); finish(); return; }
+  setYearLabel(current);
+  const ns = yearNodes(current);
+  let t = 0;
+  ns.forEach((n,i)=>{ setTimeout(()=>{ if(playing) addNode(n,true); }, t); t += 170; });
+  const wait = ns.length ? Math.max(650, t + 450) : 110;
+  if(ns.length) setTimeout(()=>fit(true), t + 300);
+  current++;
+  timer = setTimeout(playYear, wait);
+}
+function play(){ if(current>END){ resetAll(); current = START; }
+  playing = true; playBtn.textContent='❚❚'; playBtn.setAttribute('aria-label','Pause'); playYear(); }
+function stop(){ playing = false; clearTimeout(timer); playBtn.textContent='▶'; playBtn.setAttribute('aria-label','Play'); }
+function finish(){
+  setYearLabel(END);
+  document.getElementById('line').classList.add('on');
+  const h = document.getElementById('help'); h.classList.add('on'); setTimeout(()=>h.classList.remove('on'), 6000);
+  current = END+1; playBtn.textContent='↺'; playBtn.setAttribute('aria-label','Replay');
+}
+
+playBtn.onclick = ()=> playing ? stop() : play();
+document.getElementById('skip').onclick = ()=>{ stop(); jumpTo(END); };
+scrub.oninput = ()=>{ stop(); jumpTo(+scrub.value); if(+scrub.value<END){ playBtn.textContent='▶'; current = +scrub.value+1; } };
+
+// --- focus, tooltip, card ---------------------------------------------
+const tip = document.getElementById('tip'), card = document.getElementById('card');
+const fine = matchMedia('(pointer:fine)').matches;
+function showTip(ev,d){ if(!fine || d.private) return;
+  tip.textContent = d.label; tip.style.opacity = 1;
+  tip.style.left = (ev.clientX+12)+'px'; tip.style.top = (ev.clientY-30)+'px'; }
+function hideTip(){ tip.style.opacity = 0; }
+
+let focused = null, catOn = null;
+function focus(d){
+  hideTip(); catOn = null; updateChips();
+  focused = d;
+  const nb = adj.get(d.id);
+  nodeSel.classed('dim', n => n!==d && !nb.has(n.id)).classed('showlabel', n => n===d || nb.has(n.id));
+  linkSel.classed('dim', l => l.source!==d && l.target!==d).classed('hot', l => l.source===d || l.target===d);
+  const span = d.end && d.end!==d.year ? `${d.year}–${d.end}` : `${d.year}`;
+  card.querySelector('.t').textContent = d.private ? '' : d.label;
+  card.querySelector('.m').textContent = `${span} · ${({city:'place',school:'school',person:'person',field:'field',topic:'idea',hobby:'interest',work:'work'})[d.type]}`;
+  card.querySelector('.n').textContent = d.note || '';
+  card.querySelector('.n').style.display = d.note ? '' : 'none';
+  const a = card.querySelector('a');
+  if(d.url){ a.href = d.url; a.textContent = 'Open ↗'; a.style.display=''; } else a.style.display='none';
+  card.classList.add('on');
+}
+function clearFocus(){
+  focused = null; nodeSel.classed('dim',false).classed('showlabel',false);
+  linkSel.classed('dim',false).classed('hot',false); card.classList.remove('on');
+  if(catOn) highlightCat(catOn);
+}
+card.querySelector('.x').onclick = ()=>{ catOn=null; updateChips(); clearFocus(); };
+
+// --- categories & sort -------------------------------------------------
+function highlightCat(gname){
+  nodeSel.classed('dim', n=>n.group!==gname).classed('showlabel', n=>n.group===gname && (n.size||1)>=2);
+  linkSel.classed('dim', l=>l.source.group!==gname && l.target.group!==gname).classed('hot',false);
+}
+function updateChips(){ document.querySelectorAll('.chip').forEach(c=>c.classList.toggle('on', c.dataset.g===catOn)); }
+document.querySelectorAll('.chip').forEach(c=>{
+  const act = ()=>{ catOn = (catOn===c.dataset.g) ? null : c.dataset.g; updateChips();
+    focused=null; card.classList.remove('on');
+    if(catOn) highlightCat(catOn); else { nodeSel.classed('dim',false).classed('showlabel',false); linkSel.classed('dim',false); } };
+  c.onclick = act; c.onkeydown = e=>{ if(e.key==='Enter'||e.key===' '){e.preventDefault(); act();} };
+});
+const clBtn = document.getElementById('cluster');
+clBtn.onclick = ()=>{ clustered = !clustered;
+  clBtn.textContent = clustered ? 'Unsort' : 'Sort'; clBtn.setAttribute('aria-pressed', clustered);
+  live.forEach(n=>{ n.fx = n.fy = null; }); setForces(); };
+
+// --- drag ----------------------------------------------------------------
+function drag(){
+  return d3.drag()
+    .on('start', (ev,d)=>{ if(!ev.active) sim.alphaTarget(.25).restart(); d.fx=d.x; d.fy=d.y; hideTip(); })
+    .on('drag', (ev,d)=>{ d.fx=ev.x; d.fy=ev.y; })
+    .on('end', (ev,d)=>{ if(!ev.active) sim.alphaTarget(0); });   // stays pinned where dropped
+}
+
+// --- plain list (the way out) ------------------------------------------
+const list = document.getElementById('list');
+(function buildList(){
+  const sec = [
+    ['Works', n=>n.type==='work' && !/^"?(PHIL|HPSC|PHI) /.test(n.label) && n.id!=='edtech'],
+    ['Teaching', n=>n.type==='work' && /^(PHIL|HPSC|PHI) /.test(n.label)],
+    ['Places', n=>n.group==='places'],
+    ['People', n=>n.group==='people' && !n.private],
+    ['Ideas', n=>n.group==='ideas']
+  ];
+  const esc = s => String(s).replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c]);
+  let h = '<h1>Dan Li</h1><p class="nt" style="color:var(--muted);margin:0">Philosopher of science · AI, machine learning and climate science</p>';
+  sec.forEach(([title,f])=>{
+    const items = nodes.filter(f).sort((a,b)=>b.year-a.year);
+    h += `<h2>${title}</h2><ul>` + items.map(n=>{
+      const y = n.end && n.end!==n.year ? `${n.year}–${n.end}` : n.year;
+      const lab = n.url ? `<a href="${esc(n.url)}" target="_blank" rel="noopener">${esc(n.label)}</a>` : esc(n.label);
+      return `<li><span class="y">${y}</span><span>${lab}${n.note?` <span class="nt">— ${esc(n.note)}</span>`:''}</span></li>`;
+    }).join('') + '</ul>';
+  });
+  list.querySelector('.wrap').innerHTML = h;
+})();
+document.getElementById('cvbtn').onclick = ()=>{ list.classList.add('on'); list.setAttribute('aria-hidden','false'); };
+document.getElementById('closelist').onclick = ()=>{ list.classList.remove('on'); list.setAttribute('aria-hidden','true'); };
+addEventListener('keydown', e=>{ if(e.key==='Escape'){ list.classList.remove('on'); clearFocus(); } });
+
+addEventListener('resize', ()=>{ W = innerWidth; H = innerHeight; setForces(); fit(false); });
+
+// --- go --------------------------------------------------------------------
+setForces();
+if(reduce){ jumpTo(END); }
+else { render(); setTimeout(play, 500); }
+})();
+</script>
+</body>
+</html>
