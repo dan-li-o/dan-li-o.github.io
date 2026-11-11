@@ -22,7 +22,7 @@
   year: 1991
   end: 2009
   size: 3
-  note: Shaanxi, where it starts
+  note: China, where it starts
 
 - id: hefei
   type: city
@@ -48,7 +48,7 @@
   label_zh: 上海
   year: 2014
   end: 2015
-  note: worked at an edtech company; also home in Xi'an
+  note: worked at an edtech company
   links: [hefei, xian]
 
 - id: beijing
@@ -71,9 +71,10 @@
 
 - id: bloomington
   type: city
-  label: Bloomington
+  label: Bloomington, IN
   year: 2017
   end: 2022
+  note: moved to U.S.A
   links: [beijing]
 
 - id: indiana
@@ -87,7 +88,7 @@
 
 - id: boulder
   type: city
-  label: Boulder
+  label: Boulder, CO
   year: 2021
   end: 2021
   note: visiting student at NCAR
@@ -138,7 +139,7 @@
   label: Ryan O'Loughlin
   year: 2017
   size: 3
-  note: met at Indiana; also Lisa Lloyd's student
+  note: met at Indiana
   url: https://ryanoloughlin.org
   links: [indiana, robustness, lloyd, philsci, climate, ai, logic, goofing]
 
@@ -195,21 +196,23 @@
   year: 2017
   note: philosopher of physics
   url: https://hpsc.indiana.edu/about/faculty/hagar-amit.html
-  links: [indiana, philsci, philphys, ai]
+  links: [indiana, philsci, philphys, ai, physics]
 
 - id: obrien
   type: person
   label: Travis O'Brien
   year: 2020
   size: 2
+  note: climate scientist
   url: https://earth.indiana.edu/directory/faculty/obrien-travis.html
-  links: [indiana, climate, ai]
+  links: [indiana, climate, ai, physics]
 
 - id: kravitz
   type: person
   label: Ben Kravitz
   year: 2019           # joined IU in 2019
   size: 2
+  note: climate scientist
   url: https://earth.indiana.edu/directory/faculty/kravitz-ben.html
   links: [indiana, climate]
 
@@ -224,15 +227,8 @@
   type: person
   label: Filippo Radicchi
   year: 2020
-  url: https://homes.luddy.indiana.edu/filiradi/   # CHECK: link works?
+  url: https://homes.luddy.indiana.edu/filiradi/
   links: [informatics, networks, physics]
-
-- id: neale
-  type: person
-  label: Rich Neale
-  note: NCAR climate modeler
-  year: 2021
-  links: [boulder, climate]
 
 
 # ───────────── FRIENDS ─────────────
@@ -241,7 +237,7 @@
   type: person
   label: Xingchi Su
   year: 2015
-  note: logician; at PKU 2015–2018, like Dan; now at Zhejiang University
+  note: logician
   url: https://orcid.org/0000-0002-1998-8392   # swap for a ZJU page if he has one
   links: [pku, logic, badminton]
 
@@ -256,9 +252,9 @@
   type: person
   label: Evan Arnet
   year: 2017
-  note: fellow student of Lisa Lloyd
-  url: https://independent.academia.edu/EvanArnet
-  links: [indiana, lloyd, philsci, histsci]
+  note: philosopher and writer
+  url: https://evanarnet.com/
+  links: [indiana, lloyd, philsci, histsci, ryan]
 
 - id: yanghaici
   type: person
@@ -380,7 +376,7 @@
   type: topic
   label: Programming
   year: 2010
-  note: C at USTC in 2010; picked up again at IU in 2019
+  note: C at USTC; Python at IU
   links: [ustc, indiana, engineering, ai]
 
 - id: teaching
@@ -388,7 +384,7 @@
   label: Teaching
   year: 2015
   size: 2
-  note: from TA at PKU to her own courses at Indiana, Baruch and Queens
+  note: from TA at PKU to own courses at Indiana, Baruch, and Queens
 
 - id: histmed
   type: topic
@@ -470,14 +466,13 @@
   label: Art
   year: 1991
   size: 2
-  note: since she was little
+  note: mostly doodling
   links: [xian]
 
 - id: badminton
   type: hobby
   label: Badminton
   year: 2013
-  note: started at USTC; played with Yulei and Xingchi at PKU
   links: [ustc, pku]
 
 - id: scientist
@@ -496,7 +491,7 @@
   label_zh: 三体
   year: 2012
   size: 2
-  links: [reading, hefei, physics]
+  links: [reading, hefei, physics, ustc]
 
 - id: japanese
   type: hobby
@@ -536,7 +531,7 @@
   year: 2022
   size: 3
   url: https://doi.org/10.1007/s10584-022-03424-w
-  note: won the Hanson Prize as a paper in 2021
+  note: won the Hanson Prize in 2021
   links: [treerings]
 
 - id: dissertation
@@ -550,7 +545,7 @@
 - id: mm2023
   type: work
   label: Machines learn better with better data ontology (Minds and Machines)
-  short: Minds & Machines
+  short: Minds & Machines paper
   year: 2023
   size: 3
   url: https://doi.org/10.1007/s11023-023-09639-9
@@ -617,7 +612,7 @@
 - id: capstone
   type: work
   label: "Capstone: Scientific Methods in Paleoclimatology (Baruch)"
-  year: 2024           # CHECK: first year she taught it
+  year: 2024
   note: co-taught interdisciplinary course
   links: [baruch, teaching, treerings, climate]
 
