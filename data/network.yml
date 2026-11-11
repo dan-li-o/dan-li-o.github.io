@@ -230,6 +230,12 @@
   url: https://homes.luddy.indiana.edu/filiradi/
   links: [informatics, networks, physics]
 
+- id: neale
+  type: person
+  label: Rich Neale
+  note: NCAR climate modeler
+  year: 2021
+  links: [boulder, climate]
 
 # ───────────── FRIENDS ─────────────
 
