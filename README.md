@@ -4,7 +4,8 @@ Dan Li's personal site: one page, an animated network of the places, people,
 ideas and works in her life, built with D3.
 
 - **Edit the content:** `data/network.yml` (see [HOW-TO-EDIT.md](HOW-TO-EDIT.md)).
-- **Build locally:** `pip install pyyaml && python3 tools/build.py`, then
+- **Edit the CV:** `data/cv.md`; add `static/cv.pdf` for a download button.
+- **Build locally:** `pip install pyyaml markdown && python3 tools/build.py`, then
   `python3 -m http.server -d _site 8000` and open http://localhost:8000.
 - **Publish:** push to `main`. GitHub Actions checks the data, builds the page
   and publishes it to the `gh-pages` branch. A data mistake stops the publish
