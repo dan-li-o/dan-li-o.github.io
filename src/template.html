@@ -53,10 +53,10 @@
   /* controls */
   #bar{position:fixed;left:16px;right:16px;bottom:16px;display:flex;gap:10px;align-items:center;
     flex-wrap:wrap}
-  button,.chip{font:500 12px Inter,system-ui,sans-serif;color:var(--ink);background:transparent;
+  button,.chip,a.btn{font:500 12px Inter,system-ui,sans-serif;color:var(--ink);background:transparent;
     border:1px solid var(--line);border-radius:999px;padding:6px 11px;cursor:pointer;
     display:inline-flex;align-items:center;gap:6px;min-height:30px}
-  button:hover,.chip:hover{border-color:var(--muted)}
+  button:hover,.chip:hover,a.btn:hover{border-color:var(--muted)}
   .chip i{width:9px;height:9px;border-radius:50%;display:inline-block}
   .chip.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
   #scrub{flex:1;min-width:120px;accent-color:var(--muted)}
@@ -65,7 +65,7 @@
   @media (min-width:760px){ .sep{display:none} }
 
   /* top-right */
-  #cvbtn{position:fixed;top:16px;right:16px;font-size:12px;letter-spacing:.06em}
+  #cvbtn{position:fixed;top:16px;right:16px;font-size:12px;letter-spacing:.06em;text-decoration:none}
 
   /* card */
   #card{position:fixed;left:16px;top:16px;padding-right:34px !important;max-width:min(340px,calc(100vw - 32px));
@@ -82,19 +82,6 @@
     padding:4px 8px;border-radius:6px;opacity:0;transition:opacity .12s;white-space:nowrap;max-width:70vw;
     overflow:hidden;text-overflow:ellipsis}
 
-  /* list panel */
-  #list{position:fixed;inset:0;background:var(--bg);overflow:auto;padding:56px 24px 40px;display:none}
-  #list.on{display:block}
-  #list .wrap{max-width:720px;margin:0 auto}
-  #list h1{font:500 22px Inter,system-ui,sans-serif;margin:0 0 4px}
-  #list h2{font:500 12px Inter,system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;
-    color:var(--muted);margin:28px 0 8px}
-  #list ul{list-style:none;padding:0;margin:0}
-  #list li{padding:6px 0;border-bottom:1px solid var(--line);display:flex;gap:12px}
-  #list li .y{color:var(--muted);min-width:84px;font-variant-numeric:tabular-nums}
-  #list li .nt{color:var(--muted)}
-  #list a{color:var(--ink)}
-  #closelist{position:fixed;top:16px;right:16px}
 
   #help{position:fixed;right:16px;bottom:64px;color:var(--muted);font-size:11px;text-align:right;
     pointer-events:none;opacity:0;transition:opacity 1s}
@@ -104,11 +91,11 @@
 </style>
 </head>
 <body>
-<svg id="net" role="img" aria-label="A network of Dan Li's life: places, people, ideas and works, growing year by year from 1991. Open the CV list for the same information as text."></svg>
+<svg id="net" role="img" aria-label="A network of Dan Li's life: places, people, ideas and works, growing year by year from 1991. The CV page has her work as text."></svg>
 <div id="year" aria-hidden="true">1991</div>
 <div id="line"><span class="l1">More than the sum of my connections.</span><span class="l2">Thank you for being one.</span></div>
 
-<button id="cvbtn" aria-label="Open the plain list of everything">CV ≡</button>
+<a id="cvbtn" class="btn" href="cv/">CV</a>
 
 <div id="card" role="dialog" aria-live="polite">
   <button class="x" aria-label="Close">✕</button>
@@ -131,7 +118,6 @@
   <button id="cluster" aria-pressed="false">Sort</button>
 </div>
 
-<div id="list" aria-hidden="true"><button id="closelist">Close ✕</button><div class="wrap"></div></div>
 
 <noscript><div style="max-width:720px;margin:40px auto;padding:0 20px">__NOSCRIPT__</div></noscript>
 <script type="text/yaml" id="data">
@@ -534,31 +520,7 @@ function drag(){
     .on('end', (ev,d)=>{ if(!ev.active) sim.alphaTarget(0); });   // stays pinned where dropped
 }
 
-// --- plain list (the way out) ------------------------------------------
-const list = document.getElementById('list');
-(function buildList(){
-  const sec = [
-    ['Works', n=>n.type==='work' && !/^"?(PHIL|HPSC|PHI) /.test(n.label) && n.id!=='edtech'],
-    ['Teaching', n=>n.type==='work' && /^(PHIL|HPSC|PHI) /.test(n.label)],
-    ['Places', n=>n.group==='places'],
-    ['People', n=>n.group==='people' && !n.private],
-    ['Ideas', n=>n.group==='ideas']
-  ];
-  const esc = s => String(s).replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c]);
-  let h = '<h1>Dan Li</h1><p class="nt" style="color:var(--muted);margin:0">Philosopher of science · AI, machine learning and climate science</p>';
-  sec.forEach(([title,f])=>{
-    const items = nodes.filter(f).sort((a,b)=>b.year-a.year);
-    h += `<h2>${title}</h2><ul>` + items.map(n=>{
-      const y = n.end && n.end!==n.year ? `${n.year}–${n.end}` : n.year;
-      const lab = n.url ? `<a href="${esc(n.url)}" target="_blank" rel="noopener">${esc(n.label)}</a>` : esc(n.label);
-      return `<li><span class="y">${y}</span><span>${lab}${n.note?` <span class="nt">— ${esc(n.note)}</span>`:''}</span></li>`;
-    }).join('') + '</ul>';
-  });
-  list.querySelector('.wrap').innerHTML = h;
-})();
-document.getElementById('cvbtn').onclick = ()=>{ list.classList.add('on'); list.setAttribute('aria-hidden','false'); };
-document.getElementById('closelist').onclick = ()=>{ list.classList.remove('on'); list.setAttribute('aria-hidden','true'); };
-addEventListener('keydown', e=>{ if(e.key==='Escape'){ list.classList.remove('on'); clearFocus(); } });
+addEventListener('keydown', e=>{ if(e.key==='Escape') clearFocus(); });
 
 addEventListener('resize', ()=>{ W = innerWidth; H = innerHeight; setForces(); fit(false); });
 

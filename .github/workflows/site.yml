@@ -24,7 +24,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: pip install pyyaml
+      - run: pip install pyyaml markdown
       - name: Check the data and build
         run: python3 tools/build.py
       - name: Publish to gh-pages

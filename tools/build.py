@@ -5,15 +5,19 @@ Fails with a plain message if the data has a mistake, so a typo never reaches th
 """
 import html
 import pathlib
+import re
 import shutil
 import sys
 
+import markdown
 import yaml
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 DATA = ROOT / "data" / "network.yml"
 TEMPLATE = ROOT / "src" / "template.html"
 OUT = ROOT / "_site"
+CV_MD = ROOT / "data" / "cv.md"
+CV_TEMPLATE = ROOT / "src" / "cv.html"
 STATIC = ROOT / "static"   # anything here is published as-is (e.g. static/cv.pdf -> /cv.pdf)
 
 TYPES = {"city", "school", "person", "field", "topic", "hobby", "work"}
@@ -66,7 +70,7 @@ def noscript_list(nodes):
               ("Places", lambda n: n["type"] in ("city", "school")),
               ("People", lambda n: n["type"] == "person" and not n.get("private")),
               ("Ideas", lambda n: n["type"] in ("field", "topic", "hobby"))]
-    out = ["<h1>Dan Li</h1><p>Philosopher of science · AI, machine learning and climate science</p>"]
+    out = ['<h1>Dan Li</h1><p>Philosopher of science · AI, machine learning and climate science</p><p><a href="cv/">CV</a></p>']
     for title, f in groups:
         out.append(f"<h2>{title}</h2><ul>")
         for n in sorted(filter(f, nodes), key=lambda n: -n["year"]):
@@ -76,6 +80,24 @@ def noscript_list(nodes):
             out.append(f"<li>{n['year']} · {lab}</li>")
         out.append("</ul>")
     return "".join(out)
+
+
+def build_cv():
+    """data/cv.md -> _site/cv/index.html. Entries look like:  - **2023** · text"""
+    text = CV_MD.read_text(encoding="utf-8")
+    body = markdown.markdown(text, extensions=["sane_lists"])
+    # year in bold at the start of a list item becomes its own column
+    body = re.sub(r"<li>\s*<strong>([^<]+)</strong>\s*·\s*", r'<li class="ent"><span class="y">\1</span>', body)
+    pdf = (STATIC / "cv.pdf").exists()
+    page = CV_TEMPLATE.read_text(encoding="utf-8")
+    page = page.replace("__CV__", body).replace(
+        "__PDF__", '<a href="../cv.pdf">Download PDF ↓</a>' if pdf else "")
+    (OUT / "cv").mkdir(parents=True, exist_ok=True)
+    (OUT / "cv" / "index.html").write_text(page, encoding="utf-8")
+    entries = body.count('class="ent"')
+    if entries < 10:
+        fail("data/cv.md: entries should look like '- **2023** · text'")
+    return entries, pdf
 
 
 def main():
@@ -96,7 +118,9 @@ def main():
     OUT.mkdir(exist_ok=True)
     (OUT / "index.html").write_text(page, encoding="utf-8")
     links = {tuple(sorted((n["id"], l))) for n in nodes for l in (n.get("links") or [])}
+    entries, pdf = build_cv()
     print(f"✓ {len(nodes)} nodes, {len(links)} links. Built _site/index.html")
+    print(f"✓ CV: {entries} entries{', with PDF' if pdf else ', no PDF yet (add static/cv.pdf)'}. Built _site/cv/index.html")
 
 
 if __name__ == "__main__":

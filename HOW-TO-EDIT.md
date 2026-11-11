@@ -38,6 +38,17 @@ Optional lines:
 
 Lines starting with `#` are notes to yourself; the site ignores them.
 
+## Update the CV
+
+The **CV** button opens `/cv/`, built from **`data/cv.md`**.
+
+- Each entry is one line: `- **2023** · What happened`
+- Details go underneath, indented four spaces: `    - Advisor: …`
+- Section titles start with `## `; sub-titles with `### `.
+- Links: `[text](https://…)`. Italics: `*Title*`. Bold: `**Li, D.**`
+- To offer a PDF, add it as `static/cv.pdf`. A "Download PDF" button appears
+  on the CV page by itself.
+
 ## How links work
 
 - Write a link on **either** node, once. `links: [a, b]`
